@@ -1,0 +1,14 @@
+[package]
+name = "mavlink-msp-bridge"
+version = "0.0.1"
+authors = ["wucke13 <wucke13@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+bytes = "0.4"
+clap = "2"
+crc-any = "1.1"
+env_logger = "0.6"
+lazy_static = "1.3.0"
+log = "0.4"
+serialport = "3.2"
