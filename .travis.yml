@@ -1,0 +1,109 @@
+# Based on the "trust" template v0.1.2
+# https://github.com/japaric/trust/tree/v0.1.2
+
+dist: trusty
+language: rust
+services: docker
+sudo: required
+
+env:
+  global:
+    - CRATE_NAME=mavlink-msp-bridge
+
+matrix:
+  include:
+    # Linux
+    - env: TARGET=aarch64-unknown-linux-gnu
+    - env: TARGET=arm-unknown-linux-gnueabi
+    - env: TARGET=armv7-unknown-linux-gnueabihf
+    - env: TARGET=i686-unknown-linux-gnu
+    - env: TARGET=i686-unknown-linux-musl
+    - env: TARGET=mips-unknown-linux-gnu
+    - env: TARGET=mips64-unknown-linux-gnuabi64
+    - env: TARGET=mips64el-unknown-linux-gnuabi64
+    - env: TARGET=mipsel-unknown-linux-gnu
+    - env: TARGET=powerpc-unknown-linux-gnu
+    - env: TARGET=powerpc64-unknown-linux-gnu
+    - env: TARGET=powerpc64le-unknown-linux-gnu
+    - env: TARGET=s390x-unknown-linux-gnu DISABLE_TESTS=1
+    - env: TARGET=x86_64-unknown-linux-gnu
+    - env: TARGET=x86_64-unknown-linux-musl
+
+    # OSX
+    - env: TARGET=i686-apple-darwin
+      os: osx
+    - env: TARGET=x86_64-apple-darwin
+      os: osx
+
+    # *BSD
+    - env: TARGET=i686-unknown-freebsd DISABLE_TESTS=1
+    - env: TARGET=x86_64-unknown-freebsd DISABLE_TESTS=1
+    - env: TARGET=x86_64-unknown-netbsd DISABLE_TESTS=1
+
+    # Windows
+    - env: TARGET=x86_64-pc-windows-gnu
+
+    # Bare metal
+    # These targets don't support std and as such are likely not suitable for
+    # most crates.
+    # - env: TARGET=thumbv6m-none-eabi
+    # - env: TARGET=thumbv7em-none-eabi
+    # - env: TARGET=thumbv7em-none-eabihf
+    # - env: TARGET=thumbv7m-none-eabi
+
+    # Testing other channels
+    - env: TARGET=x86_64-unknown-linux-gnu
+      rust: nightly
+    - env: TARGET=x86_64-apple-darwin
+      os: osx
+      rust: nightly
+
+before_install:
+  - set -e
+  - rustup self update
+
+install:
+  - sh ci/install.sh
+  - source ~/.cargo/env || true
+
+script:
+  - bash ci/script.sh
+
+after_script: set +e
+
+before_deploy:
+  - sh ci/before_deploy.sh
+
+deploy:
+  # TODO update `api_key.secure`
+  # - Create a `public_repo` GitHub token. Go to: https://github.com/settings/tokens/new
+  # - Encrypt it: `travis encrypt 0123456789012345678901234567890123456789
+  # - Paste the output down here
+  api_key:
+    secure: HikfcBnNn7khIGGu2FrWqDt2YWAUM9+uNI3Mk3wWrXMF/717DKnLZFJ4ApLyp+nrPq9fNSf9s7VfvLT0ALugwzXEc8h1CI5Qo9+N6vYChvhUhWCZ16wIGeRXfyELsvVVMCz57o0u2HwPy1QTLA9PCbaYVkptH3qYQLpupRLSkrzqrbvCpl0aUaKoAzIB6it5Brm3YOpGjWs+BxH73bb1sDDLjY4jzYZj4KNHFdCjLjf0R396uquoIkvAVVpG9YrbzXOvRkl6Z/pMjjmCUtwdVxbB4rw+gbVoG81yTU8w/MmW9kK6TYLFqWSMg0t6RfFloVkGHA7V2m0d+uy9Az6O1/yUCVwu8yV66CuZCvFECFivsKMWlQFuPUJY1V13Mt5oiTgD9YaHuJgcTxqhEnQET5+kMFWvYgJrwazFDH6lt+XaIYCYfqAJSVse28sxBVuGgIuBckm+DeO4hB1FpgPNy5zYphutpkYe4INBJXRidp7LiWXHzVL8k4MvWHpacXIq4r1rCHtdjfz3v9j5bvrkNkNdFAsv27Z4gdq9O7VP7w0PDD9b02AK18tRjLkW19Vha2ryRn3lDYJivxuZNLe6BajvMpOtew5VVW4UjCgbgxzagGyoAiQirPYC6+dSkT+SAo52jHcfF+ClLCGMOyzVqZ+LJumem801SVT1xUK/2AE=
+  file_glob: true
+  file: $CRATE_NAME-$TRAVIS_TAG-$TARGET.*
+  on:
+    # TODO Here you can pick which targets will generate binary releases
+    # In this example, there are some targets that are tested using the stable
+    # and nightly channels. This condition makes sure there is only one release
+    # for such targets and that's generated using the stable channel
+    condition: $TRAVIS_RUST_VERSION = stable
+    tags: true
+  provider: releases
+  skip_cleanup: true
+
+cache: cargo
+before_cache:
+  # Travis can't cache files that are not readable by "others"
+  - chmod -R a+r $HOME/.cargo
+
+branches:
+  only:
+    # release tags
+    - /^v\d+\.\d+\.\d+.*$/
+    - master
+
+notifications:
+  email:
+on_success: never
