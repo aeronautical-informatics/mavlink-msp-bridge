@@ -1,4 +1,7 @@
 language: rust
+script:
+  - cargo build --verbose --all
+  - cargo test --verbose --all
 cache: cargo
 sudo: required
 
@@ -10,8 +13,14 @@ rust:
 matrix:
   allow_failures:
     - rust: nightly
+os:
+  - linux
+  - osx
+  - windows
 
 addons:
   apt:
     packages:
       - libudev-dev 
+
+# ex: set tabstop=2 sts=2 sw=2 expandtab
