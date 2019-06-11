@@ -61,3 +61,4 @@ fn main() {
 
     info!("started");
 }
+//wucke13: write a `tokio::codec::Decoder` impl and ensure `AsyncRead` is available for your serial port, then construct a stream using `FramedRead`
