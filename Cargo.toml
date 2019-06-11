@@ -3,6 +3,7 @@ name = "mavlink-msp-bridge"
 version = "0.0.1"
 authors = ["wucke13 <wucke13@gmail.com>"]
 edition = "2018"
+license = "MIT"
 
 [dependencies]
 bytes = "0.4"
