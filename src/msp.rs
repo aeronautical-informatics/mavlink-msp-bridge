@@ -153,7 +153,6 @@ impl Decoder for MSPCodec {
                 Some(CodecStep::Header) if src.len() >= 2 => {
                     self.next_step = None;
                     let mut buf = src.split_to(2).freeze().into_buf();
-                    println!("{:?}", &buf);
                     self.message.version = MSPVersion::try_from(buf.get_u8())?;
                     self.message.direction = MSPDirection::try_from(buf.get_u8())?;
                     self.next_step = match self.message.version {
@@ -162,8 +161,8 @@ impl Decoder for MSPCodec {
                     };
                 }
                 Some(CodecStep::V1Fields) if src.len() >= 2 => {
-                    self.next_step = None;
                     let mut buf = src.split_to(2).freeze().into_buf();
+                    self.message.flag = None;
                     self.payload_size = buf.get_u8() as usize;
                     self.message.function = buf.get_u8() as u16;
                     self.next_step = match self.payload_size {
@@ -183,7 +182,7 @@ impl Decoder for MSPCodec {
                     self.payload_size = buf.get_u16_le() as usize;
                     self.next_step = Some(CodecStep::Payload);
                 }
-                Some(CodecStep::Payload) if self.message.payload.len() <= src.len() => {
+                Some(CodecStep::Payload) if self.payload_size <= src.len() => {
                     self.message.payload = src.split_to(self.payload_size).to_vec();
                     self.next_step = Some(CodecStep::Checksum);
                     assert_eq!(self.payload_size, self.message.payload.len());
@@ -196,7 +195,7 @@ impl Decoder for MSPCodec {
                         false => {
                             return Err(io::Error::new(
                                 io::ErrorKind::InvalidInput,
-                                "wrong checksum",
+                                "wrong MSP checksum",
                             ))
                         }
                     }
@@ -313,6 +312,33 @@ mod test {
     }
 
     #[test]
+    fn pure_bytes_to_mspv2_partial() {
+        let mut codec = MSPCodec::new();
+        let expected = MSPMessage {
+            version: MSPVersion::V2,
+            direction: MSPDirection::Response,
+            flag: Some(0xa5),
+            function: 0x4242,
+            payload: "Hello flying world".as_bytes().to_vec(),
+        };
+
+        let bytes = vec![
+            0x24u8, 0x58, 0x3e, 0xa5, 0x42, 0x42, 0x12, 0x00, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20,
+            0x66, 0x6c, 0x79, 0x69, 0x6e, 0x67, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x82,
+        ];
+
+        for n in 0..bytes.len() {
+            let mut buf = BytesMut::with_capacity(bytes.len());
+            buf.extend_from_slice(&bytes[..n]);
+            let result = codec.decode(&mut buf).unwrap();
+            assert_eq!(None, result);
+            buf.extend_from_slice(&bytes[n..]);
+            let result = codec.decode(&mut buf);
+            assert_eq!(expected, result.unwrap().unwrap());
+        }
+    }
+
+    #[test]
     fn pure_bytes_to_mspv2_checksum_error() {
         let mut codec = MSPCodec::new();
         let mut buf = BytesMut::from(vec![
@@ -320,7 +346,7 @@ mod test {
             0x66, 0x6c, 0x79, 0x69, 0x6e, 0x67, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x81,
         ]);
 
-        let expected = io::Error::new(io::ErrorKind::InvalidInput, "wrong checksum");
+        let expected = io::Error::new(io::ErrorKind::InvalidInput, "wrong MSP checksum");
         let result = codec.decode(&mut buf).unwrap_err();
         assert_eq!(expected.kind(), result.kind());
         assert_eq!(format!("{}", expected), format!("{}", result));
