@@ -1,50 +1,88 @@
-//use bytes::{Bytes, BytesMut, Buf, BufMut};
-use crc_any::CRC;
+use std::clone::Clone;
 use std::convert::TryFrom;
-use std::num::ParseIntError;
+use std::io;
 
-// Request: Slave < Master
-// Response: Slave > Master
-// Error: Slave|Master > Master|Slave
+use bytes::{Buf, BufMut, BytesMut, IntoBuf};
+use crc_any::CRC;
+use tokio::codec::{Decoder, Encoder};
 
-#[derive(Debug, PartialEq)]
-pub enum Direction {
+/// Request: Master to Slave (`<`)
+/// Response: Slave to Master (`>`)
+/// Error: Master to Slave or Slave to Master (`!`)
+#[derive(Clone, Debug, PartialEq)]
+pub enum MSPDirection {
     Request,
     Response,
     Error,
 }
 
-#[derive(Debug, PartialEq)]
-pub struct Frame {
-    pub direction: Direction,
+impl From<&MSPDirection> for u8 {
+    fn from(d: &MSPDirection) -> Self {
+        match d {
+            MSPDirection::Request => '<' as u8,
+            MSPDirection::Response => '>' as u8,
+            MSPDirection::Error => '!' as u8,
+        }
+    }
+}
+
+impl TryFrom<u8> for MSPDirection {
+    type Error = io::Error;
+    fn try_from(byte: u8) -> Result<Self, <Self as TryFrom<u8>>::Error> {
+        match byte as char {
+            '<' => Ok(MSPDirection::Request),
+            '>' => Ok(MSPDirection::Response),
+            '!' => Ok(MSPDirection::Error),
+            _ => Err(io::Error::new(
+                io::ErrorKind::InvalidInput,
+                "unknown MSP direction",
+            )),
+        }
+    }
+}
+
+/// V1: (`M`)
+/// V2: (`X`)
+#[derive(Clone, Debug, PartialEq)]
+pub enum MSPVersion {
+    V1,
+    V2,
+}
+
+impl From<&MSPVersion> for u8 {
+    fn from(d: &MSPVersion) -> Self {
+        match d {
+            MSPVersion::V1 => 'M' as u8,
+            MSPVersion::V2 => 'X' as u8,
+        }
+    }
+}
+
+impl TryFrom<u8> for MSPVersion {
+    type Error = io::Error;
+    fn try_from(byte: u8) -> Result<Self, <Self as TryFrom<u8>>::Error> {
+        match byte as char {
+            'M' => Ok(MSPVersion::V1),
+            'X' => Ok(MSPVersion::V2),
+            _ => Err(io::Error::new(
+                io::ErrorKind::InvalidInput,
+                "unknown MSP version",
+            )),
+        }
+    }
+}
+
+/// A flag may only be `Some(_)` if `version == MSPVersion::V2`
+#[derive(Clone, Debug, PartialEq)]
+pub struct MSPMessage {
+    pub version: MSPVersion,
+    pub direction: MSPDirection,
     pub flag: Option<u8>,
     pub function: u16,
     pub payload: Vec<u8>,
 }
 
-impl std::convert::TryFrom<u8> for Direction {
-    type Error = &'static str;
-    fn try_from(byte: u8) -> Result<Self, <Self as TryFrom<u8>>::Error> {
-        match byte as char {
-            '<' => Ok(Direction::Request),
-            '>' => Ok(Direction::Response),
-            '!' => Ok(Direction::Error),
-            _ => Err("unknown message direction"),
-        }
-    }
-}
-
-impl From<&Direction> for u8 {
-    fn from(d: &Direction) -> Self {
-        match d {
-            Direction::Request => '<' as u8,
-            Direction::Response => '>' as u8,
-            Direction::Error => '!' as u8,
-        }
-    }
-}
-
-impl std::fmt::Display for Frame {
+impl std::fmt::Display for MSPMessage {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         write!(
             f,
@@ -54,140 +92,258 @@ impl std::fmt::Display for Frame {
     }
 }
 
-impl Frame {
-    pub fn build_v1(&self) -> Vec<u8> {
-        let payload_length = u16::try_from(self.payload.len()).expect("payload too long");
-        let total_length = 9 + self.payload.len();
-
-        //poly: $t, width: usize, init: $t, xorout: $t, reflect: bool<Paste>
-        let mut crc = CRC::create_crc(0xd5, 8, 0x0, 0x0, false);
-
-        let mut result = vec![0 as u8; total_length];
-        result[0] = '$' as u8;
-        result[1] = 'X' as u8;
-        result[2] = u8::from(&self.direction);
-        result[3] = self.flag.unwrap_or(0);
-        result.splice(4..5, self.function.to_le_bytes().iter().cloned());
-        result.splice(6..7, payload_length.to_le_bytes().iter().cloned());
-        result.splice(8.., self.payload.iter().cloned());
-        crc.digest(&result[3..]);
-        let crc = u8::try_from(crc.get_crc()).unwrap();
-
-        result.push(crc);
-
-        result
-    }
-
-    pub fn build_v2(&self) -> Vec<u8> {
-        let payload_length = u16::try_from(self.payload.len()).expect("payload too long");
-        let total_length = 9 + self.payload.len();
-
-        //poly: $t, width: usize, init: $t, xorout: $t, reflect: bool<Paste>
-        let mut crc = CRC::create_crc(0xd5, 8, 0x0, 0x0, false);
-
-        let mut result = vec![0 as u8; total_length];
-        result[0] = '$' as u8;
-        result[1] = 'X' as u8;
-        result[2] = u8::from(&self.direction);
-        result[3] = self.flag.unwrap_or(0);
-        result.splice(4..5, self.function.to_le_bytes().iter().cloned());
-        result.splice(6..7, payload_length.to_le_bytes().iter().cloned());
-        result.splice(8.., self.payload.iter().cloned());
-        crc.digest(&result[3..]);
-        let crc = u8::try_from(crc.get_crc()).unwrap();
-
-        result.push(crc);
-
-        result
-    }
-}
-
-impl TryFrom<&[u8]> for Frame {
-    type Error = &'static str;
-
-    fn try_from(frame: &[u8]) -> Result<Self, Self::Error> {
-        if frame.len() < 2 {
-            return Err("frame to short to be valid");
-        }
-
-        // missing: check crc
-
-        if frame.starts_with(&['$' as u8, 'X' as u8]) {
-            let mut crc = CRC::create_crc(0xd5, 8, 0x0, 0x0, false);
-
-            let direction = Direction::try_from(frame[2])?;
-            let flag = Some(frame[3]);
-            let function = u16::from_le_bytes([frame[4], frame[5]]);
-            let payload_length = u16::from_le_bytes([frame[6], frame[7]]);
-            let payload = frame[8..8 + payload_length as usize].to_vec();
-            crc.digest(&frame[3..8 + payload_length as usize]);
-            let crc = u8::try_from(crc.get_crc()).unwrap();
-            if &crc != frame.last().unwrap() {
-                return Err("wrong crc");
+impl MSPMessage {
+    pub fn checksum(&self) -> u8 {
+        match self.version {
+            MSPVersion::V1 => {
+                panic!("not yet implemented");
             }
-
-            return Ok(Frame {
-                direction: direction,
-                flag: flag,
-                function: function,
-                payload: payload,
-            });
-        } else if frame.starts_with(&['$' as u8, 'M' as u8]) {
-
-        } else {
-            return Err("frame has invalid start sequence");
+            MSPVersion::V2 => {
+                let mut crc = CRC::create_crc(0xd5, 8, 0x0, 0x0, false);
+                crc.digest(&[self.flag.unwrap_or(0)]);
+                crc.digest(&self.function.to_le_bytes());
+                let payload_size = u16::try_from(self.payload.len()).expect("payload too big");
+                crc.digest(&payload_size.to_le_bytes());
+                crc.digest(&self.payload);
+                u8::try_from(crc.get_crc()).unwrap()
+            }
         }
+    }
+}
 
-        Err("not implemented yet")
+#[derive(Debug)]
+enum CodecStep {
+    Header,
+    V1Fields,
+    V2Fields,
+    Jumbo,
+    Payload,
+    Checksum,
+}
+
+#[derive(Debug)]
+pub struct MSPCodec {
+    message: MSPMessage,
+    next_step: Option<CodecStep>,
+    payload_size: usize,
+}
+
+impl MSPCodec {
+    pub fn new() -> MSPCodec {
+        MSPCodec {
+            message: MSPMessage {
+                version: MSPVersion::V1,
+                direction: MSPDirection::Error,
+                flag: None,
+                function: 0,
+                payload: Vec::new(),
+            },
+            next_step: None,
+            payload_size: 0,
+        }
+    }
+}
+
+impl Decoder for MSPCodec {
+    type Item = MSPMessage;
+    type Error = io::Error;
+    fn decode(&mut self, src: &mut BytesMut) -> Result<Option<Self::Item>, Self::Error> {
+        loop {
+            match self.next_step {
+                Some(CodecStep::Header) if src.len() >= 2 => {
+                    self.next_step = None;
+                    let mut buf = src.split_to(2).freeze().into_buf();
+                    println!("{:?}", &buf);
+                    self.message.version = MSPVersion::try_from(buf.get_u8())?;
+                    self.message.direction = MSPDirection::try_from(buf.get_u8())?;
+                    self.next_step = match self.message.version {
+                        MSPVersion::V1 => Some(CodecStep::V1Fields),
+                        MSPVersion::V2 => Some(CodecStep::V2Fields),
+                    };
+                }
+                Some(CodecStep::V1Fields) if src.len() >= 2 => {
+                    self.next_step = None;
+                    let mut buf = src.split_to(2).freeze().into_buf();
+                    self.payload_size = buf.get_u8() as usize;
+                    self.message.function = buf.get_u8() as u16;
+                    self.next_step = match self.payload_size {
+                        255 => Some(CodecStep::Jumbo),
+                        _ => Some(CodecStep::Payload),
+                    };
+                }
+                Some(CodecStep::V2Fields) if 5 <= src.len() => {
+                    let mut buf = src.split_to(5).freeze().into_buf();
+                    self.message.flag = Some(buf.get_u8());
+                    self.message.function = buf.get_u16_le();
+                    self.payload_size = buf.get_u16_le() as usize;
+                    self.next_step = Some(CodecStep::Payload);
+                }
+                Some(CodecStep::Jumbo) if src.len() >= 2 => {
+                    let mut buf = src.split_to(2).freeze().into_buf();
+                    self.payload_size = buf.get_u16_le() as usize;
+                    self.next_step = Some(CodecStep::Payload);
+                }
+                Some(CodecStep::Payload) if self.message.payload.len() <= src.len() => {
+                    self.message.payload = src.split_to(self.payload_size).to_vec();
+                    self.next_step = Some(CodecStep::Checksum);
+                    assert_eq!(self.payload_size, self.message.payload.len());
+                }
+                Some(CodecStep::Checksum) if 1 <= src.len() => {
+                    self.next_step = None;
+                    let mut buf = src.split_to(1).freeze().into_buf();
+                    match self.message.checksum() == buf.get_u8() {
+                        true => return Ok(Some(self.message.clone())),
+                        false => {
+                            return Err(io::Error::new(
+                                io::ErrorKind::InvalidInput,
+                                "wrong checksum",
+                            ))
+                        }
+                    }
+                }
+                None if 1 <= src.len() => {
+                    if let Some(next_sof) = src.iter().position(|b| *b == b'$') {
+                        src.advance(next_sof + 1);
+                        self.next_step = Some(CodecStep::Header);
+                    } else {
+                        src.clear();
+                    }
+                }
+                _ => return Ok(None),
+            }
+        }
+    }
+}
+
+impl Encoder for MSPCodec {
+    type Item = MSPMessage;
+    type Error = io::Error;
+    fn encode(&mut self, item: Self::Item, dst: &mut BytesMut) -> Result<(), Self::Error> {
+        match item.version {
+            MSPVersion::V1 => Err(io::Error::new(
+                io::ErrorKind::InvalidInput,
+                "unknown message direction",
+            )),
+            MSPVersion::V2 => {
+                dst.reserve(9 + item.payload.len());
+                dst.put("$X");
+                dst.put(u8::from(&item.direction));
+                dst.put(item.flag.unwrap_or(0));
+                dst.put(&item.function.to_le_bytes()[..]);
+                let payload_size = u16::try_from(item.payload.len()).expect("payload too big");
+                dst.put(&payload_size.to_le_bytes()[..]);
+                dst.put(&item.payload);
+                dst.put(item.checksum());
+                Ok(())
+            }
+        }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn pure_bytes_to_mspv2() {
+        let mut codec = MSPCodec::new();
+        let mut buf = BytesMut::from(vec![
+            0x24u8, 0x58, 0x3e, 0xa5, 0x42, 0x42, 0x12, 0x00, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20,
+            0x66, 0x6c, 0x79, 0x69, 0x6e, 0x67, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x82,
+        ]);
+
+        let expected = MSPMessage {
+            version: MSPVersion::V2,
+            direction: MSPDirection::Response,
+            flag: Some(0xa5),
+            function: 0x4242,
+            payload: "Hello flying world".as_bytes().to_vec(),
+        };
+        let result = codec.decode(&mut buf);
+        assert_eq!(expected, result.unwrap().unwrap());
     }
 
-    //fn parse_v1
+    #[test]
+    fn pure_bytes_to_multiple_mspv2() {
+        let mut codec = MSPCodec::new();
+        let mut buf = BytesMut::from(vec![
+            0x24u8, 0x58, 0x3c, 0x00, 0x64, 0x00, 0x00, 0x00, 0x8f, 0x24, 0x58, 0x3e, 0xa5, 0x42,
+            0x42, 0x12, 0x00, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x66, 0x6c, 0x79, 0x69, 0x6e,
+            0x67, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x82,
+        ]);
 
-    //fn parse_v2
-}
+        let message_1 = MSPMessage {
+            version: MSPVersion::V2,
+            direction: MSPDirection::Request,
+            flag: Some(0),
+            function: 100,
+            payload: vec![0u8; 0],
+        };
+        let message_2 = MSPMessage {
+            version: MSPVersion::V2,
+            direction: MSPDirection::Response,
+            flag: Some(0xa5),
+            function: 0x4242,
+            payload: "Hello flying world".as_bytes().to_vec(),
+        };
+        let result = codec.decode(&mut buf);
+        assert_eq!(message_1, result.unwrap().unwrap());
+        let result = codec.decode(&mut buf);
+        assert_eq!(message_2, result.unwrap().unwrap());
+    }
 
-#[test]
-fn msp_to_bytes_1_test() {
-    let sample = vec![0x24u8, 0x58, 0x3c, 0x00, 0x64, 0x00, 0x00, 0x00, 0x8f];
-    let message = Frame {
-        direction: Direction::Request,
-        flag: Some(0),
-        function: 100,
-        payload: vec![0u8; 0],
-    };
-    let bytes = message.build_v2();
-    assert_eq!(sample, bytes)
-}
+    #[test]
+    fn noised_bytes_to_mspv2() {
+        let mut codec = MSPCodec::new();
+        let mut buf = BytesMut::from(vec![
+            0x30, 0x60, 0x13, 0x24, 0x58, 0x3e, 0xa5, 0x42, 0x42, 0x12, 0x00, 0x48, 0x65, 0x6c,
+            0x6c, 0x6f, 0x20, 0x66, 0x6c, 0x79, 0x69, 0x6e, 0x67, 0x20, 0x77, 0x6f, 0x72, 0x6c,
+            0x64, 0x82, 0x25,
+        ]);
 
-#[test]
-fn msp_to_bytes_2_test() {
-    let sample = vec![
-        0x24u8, 0x58, 0x3e, 0xa5, 0x42, 0x42, 0x12, 0x00, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x66,
-        0x6c, 0x79, 0x69, 0x6e, 0x67, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x82,
-    ];
-    let message = Frame {
-        direction: Direction::Response,
-        flag: Some(0xa5),
-        function: 0x4242,
-        payload: "Hello flying world".as_bytes().to_vec(),
-    };
-    let bytes = message.build_v2();
-    assert_eq!(sample, bytes)
-}
+        let expected = MSPMessage {
+            version: MSPVersion::V2,
+            direction: MSPDirection::Response,
+            flag: Some(0xa5),
+            function: 0x4242,
+            payload: "Hello flying world".as_bytes().to_vec(),
+        };
+        let result = codec.decode(&mut buf);
+        assert_eq!(expected, result.unwrap().unwrap());
+    }
 
-#[test]
-fn bytes_to_msp_1_test() {
-    let sample = [
-        0x24u8, 0x58, 0x3e, 0xa5, 0x42, 0x42, 0x12, 0x00, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x66,
-        0x6c, 0x79, 0x69, 0x6e, 0x67, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x82,
-    ];
+    #[test]
+    fn pure_bytes_to_mspv2_checksum_error() {
+        let mut codec = MSPCodec::new();
+        let mut buf = BytesMut::from(vec![
+            0x24u8, 0x58, 0x3e, 0xa5, 0x42, 0x42, 0x12, 0x00, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20,
+            0x66, 0x6c, 0x79, 0x69, 0x6e, 0x67, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x81,
+        ]);
 
-    let msp_1 = Frame::try_from(&sample[..]).unwrap();
-    let msp_2 = Frame {
-        direction: Direction::Response,
-        flag: Some(0xa5),
-        function: 0x4242,
-        payload: "Hello flying world".as_bytes().to_vec(),
-    };
-    assert_eq!(msp_1, msp_2)
+        let expected = io::Error::new(io::ErrorKind::InvalidInput, "wrong checksum");
+        let result = codec.decode(&mut buf).unwrap_err();
+        assert_eq!(expected.kind(), result.kind());
+        assert_eq!(format!("{}", expected), format!("{}", result));
+    }
+
+    #[test]
+    fn mspv2_to_bytes() {
+        let mut codec = MSPCodec::new();
+        let mut buf = BytesMut::new();
+
+        let msp = MSPMessage {
+            version: MSPVersion::V2,
+            direction: MSPDirection::Response,
+            flag: Some(0xa5),
+            function: 0x4242,
+            payload: "Hello flying world".as_bytes().to_vec(),
+        };
+        let expected = vec![
+            0x24u8, 0x58, 0x3e, 0xa5, 0x42, 0x42, 0x12, 0x00, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20,
+            0x66, 0x6c, 0x79, 0x69, 0x6e, 0x67, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x82,
+        ];
+        let result = codec.encode(msp, &mut buf).unwrap();
+        assert_eq!((), result);
+        assert_eq!(expected, buf.to_vec());
+    }
 }
