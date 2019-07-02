@@ -1,12 +1,13 @@
 use std::net::{SocketAddr, ToSocketAddrs};
 
-use clap::{App, Arg};
+use clap::{value_t_or_exit, App, Arg};
 use log::info;
 
+mod mavlink;
 mod msp;
 mod serial;
 
-struct Config {
+pub struct Config {
     mavlink_listen: String,
     msp_serialport: String,
     msp_baud: u32,
@@ -20,10 +21,8 @@ fn main() {
         .about(env!("CARGO_PKG_DESCRIPTION"))
         .arg(
             Arg::with_name("serial")
-                .short("s")
                 .value_name("SERIALPORT")
                 .help("Select serial port for MSP side. Defaults to the first serial port found.")
-                .takes_value(true)
                 .required(true),
         )
         .arg(
@@ -36,12 +35,13 @@ fn main() {
             Arg::with_name("baud")
                 .short("b")
                 .long("baud")
-                .help("The baud rate to connect at"),
+                .help("The baud rate to connect at")
+                .default_value("9600"),
         )
         .arg(
-            Arg::with_name("mavlink-listen")
+            Arg::with_name("mavlink")
                 .short("m")
-                .long("mavlink")
+                .long("mavlink-listen")
                 .value_name("ip:port")
                 .help("Select mavlink listen adress")
                 .default_value("0.0.0.0:5760"),
@@ -55,10 +55,10 @@ fn main() {
 
     let conf = Config {
         mavlink_listen: matches.value_of("mavlink").unwrap().to_string(),
-        msp_serialport: matches.value_of("serialport").unwrap().to_string(),
-        msp_baud: 9600,
+        msp_serialport: matches.value_of("serial").unwrap().to_string(),
+        msp_baud: value_t_or_exit!(matches.value_of("baud"), u32),
     };
 
     info!("started");
+    mavlink::get_connection(&conf);
 }
-//wucke13: write a `tokio::codec::Decoder` impl and ensure `AsyncRead` is available for your serial port, then construct a stream using `FramedRead`
