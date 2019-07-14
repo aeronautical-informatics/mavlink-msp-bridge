@@ -6,6 +6,12 @@ use log::info;
 mod mavlink;
 mod msp;
 mod serial;
+mod core;
+
+enum TransportLayer {
+    UDP,
+    TCP,
+}
 
 pub struct Config {
     mavlink_listen: String,
@@ -22,29 +28,29 @@ fn main() {
         .arg(
             Arg::with_name("serial")
                 .value_name("SERIALPORT")
-                .help("Select serial port for MSP side. Defaults to the first serial port found.")
+                .help("Select serial port for MSP side")
                 .required(true),
-        )
-        .arg(
-            Arg::with_name("list-serialports")
-                .short("l")
-                .long("list-serial")
-                .help("Lists all available serialports"),
         )
         .arg(
             Arg::with_name("baud")
                 .short("b")
                 .long("baud")
-                .help("The baud rate to connect at")
+                .help("Baud rate for the serial port")
                 .default_value("9600"),
         )
         .arg(
             Arg::with_name("mavlink")
                 .short("m")
                 .long("mavlink-listen")
-                .value_name("ip:port")
-                .help("Select mavlink listen adress")
-                .default_value("0.0.0.0:5760"),
+                .value_name("transport:ip:port")
+                .help("Select mavlink connection adress")
+                .default_value("tcpin:0.0.0.0:5760"),
+        )
+        .arg(
+            Arg::with_name("list-serialports")
+                .short("l")
+                .long("list-serial")
+                .help("Lists all available serialports"),
         )
         .get_matches();
 
@@ -60,5 +66,6 @@ fn main() {
     };
 
     info!("started");
+    core::event_loop(&conf);
     mavlink::get_connection(&conf);
 }

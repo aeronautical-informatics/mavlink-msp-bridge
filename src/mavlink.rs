@@ -5,10 +5,13 @@ use std::time::Duration;
 use crate::Config;
 
 pub fn get_connection(conf: &Config) {
-    let address = format!("tcpin:{}", &conf.mavlink_listen);
-    let mut mavconn = mavlink::connect(&address).unwrap();
-
+    println!("here0");
+    let mut mavconn = mavlink::connect(&conf.mavlink_listen).unwrap();
+    
+    println!("here1");
     let vehicle = Arc::new(mavconn);
+
+    println!("here2");
 
     vehicle
         .send(
@@ -24,11 +27,10 @@ pub fn get_connection(conf: &Config) {
         let vehicle = vehicle.clone();
         move || loop {
             let res = vehicle.send_default(&heartbeat_message());
-            if res.is_ok() {
-                thread::sleep(Duration::from_secs(1));
-            } else {
+            if ! res.is_ok() {
                 println!("send failed: {:?}", res);
             }
+            thread::sleep(Duration::from_secs(1));
         }
     });
 
@@ -44,7 +46,6 @@ pub fn get_connection(conf: &Config) {
                 }
                 _ => {
                     println!("recv error: {:?}", e);
-                    break;
                 }
             },
         }
