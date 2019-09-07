@@ -10,11 +10,6 @@ use log::{debug, error, info};
 use crate::msp::{MSPConnection, MSPDirection, MSPMessage, MSPVersion};
 use crate::Config;
 
-struct Translation {
-    mavlink_request: String,
-    msp_requests: Vec<MSPMessage>,
-}
-
 struct MessageInterval {
     id: u32,
     interval: Duration,
@@ -78,29 +73,28 @@ pub fn event_loop(conf: &Config) {
 
         let mut streams = HashMap::new();
         streams.insert(0, MessageInterval::new(0, 1));
-
+        let mut next_timeout: Duration = Duration::from_nanos(1);
         loop {
             for s in streams.values_mut() {
                 if s.check() {
                     let msg = mspconn
                         .generate_mav_message(s.id)
                         .expect("unable to generate needed mavlink message");
-                    debug!("sent: \n{:?}", msg);
+                    debug!("sent: \n{:?}\n", msg);
                     mavconn
                         .send_default(&msg)
                         .expect("unable to send mavlink message");
                 }
             }
-            match rx.try_recv() {
+            match rx.recv_timeout(next_timeout) {
                 Ok(Ok((header, msg))) => {
-                    debug!("received:\n{:?}\n{:?}\n", header, msg);
+                    debug!("received:\n{:?}\n", msg);
                     //match msg {
                     //    mavlink::common::
                     //}
                 }
                 Ok(Err(e)) => match e.kind() {
                     std::io::ErrorKind::WouldBlock => {
-                        thread::sleep(Duration::from_secs(1));
                         continue;
                     }
                     _ => {
@@ -108,7 +102,7 @@ pub fn event_loop(conf: &Config) {
                         break;
                     }
                 },
-                _ => {}
+                _ => thread::sleep(Duration::from_nanos(1000)),
             }
         }
     }

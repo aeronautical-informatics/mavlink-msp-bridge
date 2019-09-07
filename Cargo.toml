@@ -6,7 +6,7 @@ edition = "2018"
 license = "MIT"
 
 [dependencies]
-bytes = "0.4"
+byteorder = "1"
 clap = "2"
 crc-any = "1.1"
 env_logger = "0.6"

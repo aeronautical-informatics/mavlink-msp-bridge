@@ -8,6 +8,7 @@ use serialport::available_ports;
 mod core;
 mod mavlink;
 mod msp;
+mod scheduler;
 mod serial;
 
 enum TransportLayer {

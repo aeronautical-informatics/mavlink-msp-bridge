@@ -297,6 +297,7 @@ impl<T: Read + Write> MSPConnection<T> {
     }
 
     pub fn request(&mut self, msg: &MSPMessage) -> Result<MSPMessage, io::Error> {
+        let now = std::time::SystemTime::now();
         let mut socket = self.socket_cell.get_mut();
 
         let buf = msg.to_vec();
@@ -306,10 +307,12 @@ impl<T: Read + Write> MSPConnection<T> {
 
         let response = MSPMessage::decode(socket)?;
 
+        debug!("time spent on MSP Request: {:?}", now.elapsed().unwrap());
+
         Ok(response)
     }
 
-    pub fn generate_mav_message(&mut self, id: u32) -> Option<mavlink::common::MavMessage> {
+    pub fn generate_mav_message(&mut self, id: u32) -> Option<common::MavMessage> {
         Some(common::MavMessage::HEARTBEAT(common::HEARTBEAT_DATA {
             custom_mode: 0,
             mavtype: mavlink::common::MavType::MAV_TYPE_QUADROTOR,
@@ -319,6 +322,19 @@ impl<T: Read + Write> MSPConnection<T> {
             mavlink_version: 0x3,
         }))
     }
+}
+
+pub struct MAVLinkGenerator {
+    needed_msp_requests: Vec<MSPMessage>,
+    mavlink_message: common::MavMessage,
+}
+
+impl MAVLinkGenerator {
+    pub fn prepare_msp_requests(message_id: u32) {}
+
+    //pub fn generate(&self, mspconn: &MSPConnection)->Option<common::MavMessage>{
+    //       None
+    //}
 }
 
 //#[cfg(test)]
