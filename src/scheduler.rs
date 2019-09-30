@@ -1,11 +1,13 @@
 use std::fmt;
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 /// `std::Vec` representing one major timeframe of `duration` length,
 /// divided in `size` slots of which each may contain one MAVLink message id.
 pub struct Schedule {
     time: Vec<Option<Task>>,
     duration: Duration,
+    last_frame: u128,
+    time_zero: Instant,
 }
 
 impl Schedule {
@@ -13,14 +15,37 @@ impl Schedule {
         Schedule {
             time: vec![None; size],
             duration: Duration::new(1, 0),
+            last_frame: 0,
+            time_zero: Instant::now(),
         }
     }
 
-    pub fn count(&self, t: &Task) -> usize {
+    pub fn next(&mut self) -> Option<Task> {
+        let duration = self.duration.as_nanos();
+        let elapsed = self.time_zero.elapsed().as_nanos();
+        let current_frame_index = elapsed * self.time.len() as u128 / duration;
+        println!("{}", self);
+
+        if self.last_frame == current_frame_index {
+            return None;
+        }
+        assert!(self.last_frame < current_frame_index);
+
+        self.last_frame += 1;
+        let mut index = (self.last_frame % self.time.len() as u128) as usize;
+        while self.time[index].is_none() && self.last_frame < current_frame_index {
+            self.last_frame += 1;
+            index = (self.last_frame % self.time.len() as u128) as usize;
+        }
+        self.time[index]
+    }
+
+    /// counts the occurences of a given task in the current schedule
+    pub fn count(&self, task: &Task) -> usize {
         self.time
             .iter()
-            .filter_map(|a| *a)
-            .filter(|a| a == t)
+            .filter_map(|t| *t)
+            .filter(|t| t == task)
             .count()
     }
 
@@ -77,9 +102,9 @@ impl Schedule {
     }
 
     pub fn delete(&mut self, task: &Task) {
-        for a in &mut self.time {
-            match a {
-                Some(t) if t == task => *a = None,
+        for i in 0..self.time.len() {
+            match self.time[i] {
+                Some(t) if t == *task => self.time[i] = None,
                 _ => (),
             }
         }
@@ -90,7 +115,7 @@ impl fmt::Display for Schedule {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
-            "Schedule {{size: {}, duartion: {:#?} }}:\n",
+            "Schedule {{size: {}, duration: {:#?} }}:\n",
             self.time.len(),
             self.duration
         )?;
@@ -108,7 +133,7 @@ impl fmt::Display for Schedule {
     }
 }
 
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Task {
     id: u32,
 }
@@ -116,91 +141,72 @@ pub struct Task {
 #[cfg(test)]
 mod test {
     use super::*;
-
-    /// Calculates the frequency of occurences of a certain task
-    pub fn frequency(s: &Schedule, task: &Task) -> f64 {
-        let count = s.count(task) as f64;
-        count / s.duration.as_secs_f64()
-    }
-
-    /// Calculates the variance of the intervals in between the occurences of a certain task
-    pub fn frequency_jitter(s: &Schedule, task: &Task) -> f64 {
-        let indexes: Vec<usize> = s
-            .time
-            .iter()
-            .enumerate()
-            .filter_map(|(i, e)| match e {
-                Some(t) if t == task => Some(i),
-                _ => None,
-            })
-            .collect();
-        let intervals = indexes
-            .iter()
-            .enumerate()
-            .map(|(i, e)| (indexes[(i + 1) % indexes.len()] + s.time.len() - e) % s.time.len());
-        let average: f64 = intervals.clone().sum::<usize>() as f64 / intervals.len() as f64;
-        intervals
-            .clone()
-            .map(|a| (a as f64 - average).powf(2.))
-            .sum::<f64>()
-            / intervals.len() as f64
-    }
+    use std::thread;
 
     #[test]
-    fn multiple_frequencies() {
-        let mut tasks: Vec<(Task, u32)> = Vec::new();
+    fn simple() {
         let mut s = Schedule::new(200);
-
-        for i in 3..10 {
+        let range = 3..10;
+        for i in range.clone() {
             let t = Task { id: i };
-            tasks.push((t, i));
             s.insert(i, t).unwrap();
         }
-
-        for (t, f) in tasks {
-            assert_eq!(frequency(&s, &t), f as f64);
-            assert!(frequency_jitter(&s, &t) < 1.0);
+        for i in range {
+            let count = s.count(&Task { id: i });
+            assert_eq!(count, i as usize);
         }
     }
 
     #[test]
     fn multiple_identical_frequencies() {
-        let mut tasks: Vec<(Task, u32)> = Vec::new();
+        let FREQ = 7;
         let mut s = Schedule::new(200);
-
-        for i in 0..20 {
+        let range = 0..20;
+        for i in range.clone() {
             let t = Task { id: i };
-            tasks.push((t, 7));
-            s.insert(7, t).unwrap();
+            s.insert(FREQ, t).unwrap();
         }
-
-        for (t, f) in tasks {
-            assert_eq!(frequency(&s, &t), f as f64);
-            assert!(frequency_jitter(&s, &t) < 1.0);
+        for i in range {
+            let count = s.count(&Task { id: i });
+            assert_eq!(count, FREQ as usize);
         }
     }
 
     #[test]
     fn multiple_similar_frequencies() {
-        let mut tasks: Vec<(Task, u32)> = Vec::new();
         let mut s = Schedule::new(200);
-
         for i in 3..14 {
             let t = Task { id: i };
-            let f = i % 5 + 1;
-            tasks.push((t, f));
-            s.insert(f, t).unwrap();
-        }
-
-        for (t, f) in tasks {
-            assert_eq!(frequency(&s, &t), f as f64);
-            assert!(frequency_jitter(&s, &t) < 1.0);
+            s.insert(i % 5 + 1, t).unwrap();
         }
     }
 
     #[test]
-    fn fuzzy_add_remove() {}
-
-    #[test]
-    fn frequency_stability_() {}
+    fn timing_behaviour() {
+        let mut s = Schedule::new(10);
+        let t = Task { id: 1 };
+        assert_eq!(s.next(), None);
+        s.insert(3, t).unwrap();
+        assert_eq!(s.next(), None);
+        thread::sleep(Duration::from_millis(100));
+        assert_eq!(s.next(), None);
+        assert_eq!(s.next(), None);
+        assert_eq!(s.next(), None);
+        thread::sleep(Duration::from_millis(300));
+        assert_eq!(s.next(), Some(Task { id: 1 }));
+        assert_eq!(s.next(), None);
+        assert_eq!(s.next(), None);
+        assert_eq!(s.next(), None);
+        thread::sleep(Duration::from_millis(700));
+        assert_eq!(s.next(), Some(Task { id: 1 }));
+        assert_eq!(s.next(), Some(Task { id: 1 }));
+        assert_eq!(s.next(), None);
+        assert_eq!(s.next(), None);
+        assert_eq!(s.next(), None);
+        thread::sleep(Duration::from_millis(1000));
+        assert_eq!(s.next(), Some(Task { id: 1 }));
+        assert_eq!(s.next(), Some(Task { id: 1 }));
+        assert_eq!(s.next(), Some(Task { id: 1 }));
+        assert_eq!(s.next(), None);
+    }
 }
