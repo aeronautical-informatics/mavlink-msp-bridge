@@ -290,7 +290,7 @@ pub struct MSPConnection<T: Read + Write> {
 
 impl<T: Read + Write> MSPConnection<T> {
     pub fn new(socket: T) -> Self {
-        debug!("new MSPConnection");
+        debug!("setting up new MSPConnection");
         MSPConnection {
             socket_cell: RefCell::new(socket),
         }

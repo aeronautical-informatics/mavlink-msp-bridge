@@ -1,16 +1,17 @@
+use std::cmp::Eq;
 use std::fmt;
 use std::time::{Duration, Instant};
 
 /// `std::Vec` representing one major timeframe of `duration` length,
 /// divided in `size` slots of which each may contain one MAVLink message id.
-pub struct Schedule {
-    time: Vec<Option<Task>>,
+pub struct Schedule<T: Clone + Copy + PartialEq> {
+    time: Vec<Option<T>>,
     duration: Duration,
     last_frame: u128,
     time_zero: Instant,
 }
 
-impl Schedule {
+impl<T: Clone + Copy + PartialEq> Schedule<T> {
     pub fn new(size: usize) -> Self {
         Schedule {
             time: vec![None; size],
@@ -20,11 +21,10 @@ impl Schedule {
         }
     }
 
-    pub fn next(&mut self) -> Option<Task> {
+    pub fn next(&mut self) -> Option<T> {
         let duration = self.duration.as_nanos();
         let elapsed = self.time_zero.elapsed().as_nanos();
         let current_frame_index = elapsed * self.time.len() as u128 / duration;
-        println!("{}", self);
 
         if self.last_frame == current_frame_index {
             return None;
@@ -41,7 +41,7 @@ impl Schedule {
     }
 
     /// counts the occurences of a given task in the current schedule
-    pub fn count(&self, task: &Task) -> usize {
+    pub fn count(&self, task: &T) -> usize {
         self.time
             .iter()
             .filter_map(|t| *t)
@@ -50,7 +50,7 @@ impl Schedule {
     }
 
     /// tries to insert a schedule into
-    pub fn insert(&mut self, frequency: u32, task: Task) -> Result<(), &'static str> {
+    pub fn insert(&mut self, frequency: u32, task: T) -> Result<(), &'static str> {
         let mut new_schedule = vec![0; self.time.len()];
         let interval = self.time.len() as f64 / frequency as f64 / self.duration.as_secs_f64();
 
@@ -101,7 +101,7 @@ impl Schedule {
         }
     }
 
-    pub fn delete(&mut self, task: &Task) {
+    pub fn delete(&mut self, task: &T) {
         for i in 0..self.time.len() {
             match self.time[i] {
                 Some(t) if t == *task => self.time[i] = None,
@@ -111,7 +111,7 @@ impl Schedule {
     }
 }
 
-impl fmt::Display for Schedule {
+impl<T: Copy + Eq + ToString> fmt::Display for Schedule<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
@@ -125,7 +125,7 @@ impl fmt::Display for Schedule {
             self.time
                 .iter()
                 .map(|a| match a {
-                    Some(task) => task.id.to_string(),
+                    Some(task) => task.to_string(),
                     _ => "-".to_string(),
                 })
                 .fold(String::new(), |a, b| a + &b)
@@ -133,15 +133,15 @@ impl fmt::Display for Schedule {
     }
 }
 
-#[derive(Clone, Copy, Debug, PartialEq)]
-pub struct Task {
-    id: u32,
-}
-
 #[cfg(test)]
 mod test {
     use super::*;
     use std::thread;
+
+    #[derive(Clone, Copy, Debug, PartialEq)]
+    pub struct Task {
+        id: u32,
+    }
 
     #[test]
     fn simple() {

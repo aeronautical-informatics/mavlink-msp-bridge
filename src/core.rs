@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use std::collections::VecDeque;
+use std::io;
 use std::sync::mpsc::{self, TryRecvError};
 use std::sync::Arc;
 use std::thread;
@@ -7,37 +8,14 @@ use std::time::{Duration, Instant};
 
 use log::{debug, error, info};
 
+use crate::mavlink::WrappedMAVConnection;
 use crate::msp::{MSPConnection, MSPDirection, MSPMessage, MSPVersion};
+use crate::scheduler::Schedule;
 use crate::Config;
 
-struct MessageInterval {
-    id: u32,
-    interval: Duration,
-    last: Instant,
-}
-
-impl MessageInterval {
-    pub fn check(&mut self) -> bool {
-        let now = Instant::now();
-        if now.duration_since(self.last) >= self.interval {
-            self.last = now;
-            return true;
-        }
-        false
-    }
-
-    pub fn new(stream_id: u32, freq: u16) -> Self {
-        let now = Instant::now();
-        Self {
-            id: stream_id,
-            interval: Duration::from_nanos(1_000_000_000 / freq as u64),
-            last: now,
-        }
-    }
-}
-
 pub fn event_loop(conf: &Config) {
-    let mut serialport = serialport::open(&conf.msp_serialport).unwrap();
+    let mut serialport =
+        serialport::open(&conf.msp_serialport).expect("unable to open serial SERIALPORT");
     serialport.set_timeout(Duration::from_millis(100));
     let mut mspconn = MSPConnection::new(serialport);
 
@@ -51,59 +29,34 @@ pub fn event_loop(conf: &Config) {
 
     debug!("\n{:?}\n\n{}\n", &msg, mspconn.request(&msg).unwrap());
 
+    let mavconn = WrappedMAVConnection::new(&conf.mavlink_listen);
+
+    let mut schedule = Schedule::new(50);
+    schedule.insert(1, 0u32); // insert heartbeat at 1 Hz
+
     info!("entering event_loop");
     loop {
-        debug!("waiting for MAVLink connection");
-        let mut mavconn = mavlink::connect(&conf.mavlink_listen).unwrap();
-        debug!("MAVLink connection received");
-        //mavconn.set_protocol_version(mavlink::MavlinkVersion::V2);
+        let next_task_id = schedule.next();
 
-        let mavconn = Arc::new(mavconn);
-
-        //gcs.send(&mavlink::MavHeader::get_default_header(), &request_stream())
-        //   .unwrap();
-
-        let (tx, rx) = mpsc::channel();
-        thread::spawn({
-            let mavconn = mavconn.clone();
-            move || loop {
-                tx.send(mavconn.recv());
+        match next_task_id {
+            Some(id) => {
+                debug!("processing task {}", id);
+                // let message = generateMavmessage(id)
+                // tx.send(message)
             }
-        });
-
-        let mut streams = HashMap::new();
-        streams.insert(0, MessageInterval::new(0, 1));
-        let mut next_timeout: Duration = Duration::from_nanos(1);
-        loop {
-            for s in streams.values_mut() {
-                if s.check() {
-                    let msg = mspconn
-                        .generate_mav_message(s.id)
-                        .expect("unable to generate needed mavlink message");
-                    debug!("sent: \n{:?}\n", msg);
-                    mavconn
-                        .send_default(&msg)
-                        .expect("unable to send mavlink message");
-                }
-            }
-            match rx.recv_timeout(next_timeout) {
-                Ok(Ok((header, msg))) => {
+            None => match mavconn.recv_timeout(Duration::from_millis(1)) {
+                Ok((header, msg)) => {
                     debug!("received:\n{:?}\n", msg);
-                    //match msg {
-                    //    mavlink::common::
-                    //}
                 }
-                Ok(Err(e)) => match e.kind() {
-                    std::io::ErrorKind::WouldBlock => {
-                        continue;
-                    }
-                    _ => {
-                        println!("recv error: {:?}", e);
-                        break;
-                    }
-                },
-                _ => thread::sleep(Duration::from_nanos(1000)),
-            }
+                Err(ref e) if e.kind() == io::ErrorKind::WouldBlock => {
+                    continue;
+                }
+
+                Err(e) => {
+                    error!("recv error: {:?}", e);
+                    panic!();
+                }
+            },
         }
     }
 }

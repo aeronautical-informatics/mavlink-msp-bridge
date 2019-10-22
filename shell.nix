@@ -4,8 +4,7 @@ stdenv.mkDerivation {
   name = "rust-env";
 
   buildInputs = [
-    git pkgconfig rustup 
-    
+    git pkg-config rustup 
     libudev
   ];
 }
