@@ -1,10 +1,10 @@
-use std::collections::HashMap;
-use std::collections::VecDeque;
+
+
 use std::io;
-use std::sync::mpsc::{self, TryRecvError};
-use std::sync::Arc;
-use std::thread;
-use std::time::{Duration, Instant};
+
+
+
+use std::time::{Duration};
 
 use log::{debug, error, info};
 
@@ -36,16 +36,14 @@ pub fn event_loop(conf: &Config) {
 
     info!("entering event_loop");
     loop {
-        let next_task_id = schedule.next();
-
-        match next_task_id {
+        match schedule.next() {
             Some(id) => {
                 debug!("processing task {}", id);
                 // let message = generateMavmessage(id)
                 // tx.send(message)
             }
             None => match mavconn.recv_timeout(Duration::from_millis(1)) {
-                Ok((header, msg)) => {
+                Ok((_header, msg)) => {
                     debug!("received:\n{:?}\n", msg);
                 }
                 Err(ref e) if e.kind() == io::ErrorKind::WouldBlock => {

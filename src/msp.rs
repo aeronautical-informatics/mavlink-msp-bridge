@@ -6,7 +6,7 @@ use std::io::{self, Read, Write};
 //use bytes::{Buf, BufMut, BytesMut, IntoBuf, Writer};
 use byteorder::{BigEndian, LittleEndian, ReadBytesExt, WriteBytesExt};
 use crc_any::CRC;
-use log::{debug, info};
+use log::{debug};
 use mavlink::common;
 
 /// Request: Master to Slave (`<`)
@@ -298,12 +298,12 @@ impl<T: Read + Write> MSPConnection<T> {
 
     pub fn request(&mut self, msg: &MSPMessage) -> Result<MSPMessage, io::Error> {
         let now = std::time::SystemTime::now();
-        let mut socket = self.socket_cell.get_mut();
+        let socket = self.socket_cell.get_mut();
 
         let buf = msg.to_vec();
         //msg.encode(&socket);
         socket.write(&buf)?;
-        socket.flush();
+        socket.flush()?;
 
         let response = MSPMessage::decode(socket)?;
 
@@ -312,7 +312,7 @@ impl<T: Read + Write> MSPConnection<T> {
         Ok(response)
     }
 
-    pub fn generate_mav_message(&mut self, id: u32) -> Option<common::MavMessage> {
+    pub fn generate_mav_message(&mut self, _id: u32) -> Option<common::MavMessage> {
         Some(common::MavMessage::HEARTBEAT(common::HEARTBEAT_DATA {
             custom_mode: 0,
             mavtype: mavlink::common::MavType::MAV_TYPE_QUADROTOR,
@@ -322,19 +322,6 @@ impl<T: Read + Write> MSPConnection<T> {
             mavlink_version: 0x3,
         }))
     }
-}
-
-pub struct MAVLinkGenerator {
-    needed_msp_requests: Vec<MSPMessage>,
-    mavlink_message: common::MavMessage,
-}
-
-impl MAVLinkGenerator {
-    pub fn prepare_msp_requests(message_id: u32) {}
-
-    //pub fn generate(&self, mspconn: &MSPConnection)->Option<common::MavMessage>{
-    //       None
-    //}
 }
 
 //#[cfg(test)]

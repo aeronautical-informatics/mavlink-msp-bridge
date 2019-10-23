@@ -7,7 +7,7 @@ use std::time::Duration;
 use mavlink::common::MavMessage;
 use mavlink::{MavConnection, MavHeader};
 
-use log::{debug, error, info};
+use log::{debug, error};
 
 type MavResponse = io::Result<(MavHeader, MavMessage)>;
 
@@ -53,3 +53,5 @@ impl WrappedMAVConnection {
         }
     }
 }
+
+pub struct MAVGenerator {}

@@ -1,8 +1,8 @@
 use std::env;
-use std::net::{SocketAddr, ToSocketAddrs};
+
 
 use clap::{value_t_or_exit, App, Arg};
-use log::{debug, info};
+use log::{debug, error, info};
 use serialport::available_ports;
 
 mod core;
@@ -67,7 +67,13 @@ fn main() {
         mavlink_listen: matches.value_of("mavlink").unwrap().to_string(),
         msp_serialport: matches
             .value_of("serial")
-            .unwrap_or(&available_ports().expect("No serial port")[0].port_name)
+            .unwrap_or(match available_ports() {
+                Ok(ref a) if a.len() >= 1 => &a[0].port_name,
+                _ => {
+                    error!("no serialport found");
+                    panic!();
+                }
+            })
             .to_string(),
 
         msp_baud: value_t_or_exit!(matches.value_of("baud"), u32),
