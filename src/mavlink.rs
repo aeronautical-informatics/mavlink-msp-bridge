@@ -4,10 +4,13 @@ use std::sync::Arc;
 use std::thread;
 use std::time::Duration;
 
-use mavlink::common::MavMessage;
+use mavlink::common::MavMessage::*;
+use mavlink::common::*;
 use mavlink::{MavConnection, MavHeader};
 
 use log::{debug, error};
+
+use crate::msp::MspConnection;
 
 type MavResponse = io::Result<(MavHeader, MavMessage)>;
 
@@ -54,4 +57,25 @@ impl WrappedMAVConnection {
     }
 }
 
-pub struct MAVGenerator {}
+pub struct MavGenerator {}
+
+impl MavGenerator {
+    pub fn is_supported_message(message_id: u32) -> bool {
+        false
+    }
+
+    pub fn get_mav_message(message_id: u32, mspconn: &dyn MspConnection) -> Option<MavMessage> {
+        match message_id {
+            0 => Some(HEARTBEAT(HEARTBEAT_DATA {
+                custom_mode: 0,
+                mavtype: MavType::MAV_TYPE_QUADROTOR,
+                autopilot: MavAutopilot::MAV_AUTOPILOT_ARDUPILOTMEGA,
+                base_mode: MavModeFlag::empty(),
+                system_status: MavState::MAV_STATE_STANDBY,
+                mavlink_version: 0x3,
+            })),
+
+            _ => None,
+        }
+    }
+}

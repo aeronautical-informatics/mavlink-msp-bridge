@@ -51,6 +51,10 @@ impl<T: Clone + Copy + PartialEq> Schedule<T> {
 
     /// tries to insert a schedule into
     pub fn insert(&mut self, frequency: u32, task: T) -> Result<(), &'static str> {
+        if frequency == 0 {
+            self.delete(&task);
+            return Ok(());
+        }
         let mut new_schedule = vec![0; self.time.len()];
         let interval = self.time.len() as f64 / frequency as f64 / self.duration.as_secs_f64();
 
@@ -159,16 +163,16 @@ mod test {
 
     #[test]
     fn multiple_identical_frequencies() {
-        let FREQ = 7;
+        let freq = 7;
         let mut s = Schedule::new(200);
         let range = 0..20;
         for i in range.clone() {
             let t = Task { id: i };
-            s.insert(FREQ, t).unwrap();
+            s.insert(freq, t).unwrap();
         }
         for i in range {
             let count = s.count(&Task { id: i });
-            assert_eq!(count, FREQ as usize);
+            assert_eq!(count, freq as usize);
         }
     }
 

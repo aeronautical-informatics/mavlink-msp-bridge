@@ -1,6 +1,5 @@
 use std::env;
 
-
 use clap::{value_t_or_exit, App, Arg};
 use log::{debug, error, info};
 use serialport::available_ports;
@@ -10,11 +9,6 @@ mod mavlink;
 mod msp;
 mod scheduler;
 mod serial;
-
-enum TransportLayer {
-    UDP,
-    TCP,
-}
 
 #[derive(Debug)]
 pub struct Config {
@@ -82,6 +76,4 @@ fn main() {
     info!("started");
     debug!("{:?}", &conf);
     core::event_loop(&conf);
-
-    //   mavlink::get_connection(&conf);
 }

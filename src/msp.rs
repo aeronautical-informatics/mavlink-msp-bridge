@@ -1,44 +1,114 @@
-use std::cell::RefCell;
 use std::clone::Clone;
-use std::convert::TryFrom;
+use std::convert::{TryFrom, TryInto};
 use std::io::{self, Read, Write};
 
 //use bytes::{Buf, BufMut, BytesMut, IntoBuf, Writer};
-use byteorder::{BigEndian, LittleEndian, ReadBytesExt, WriteBytesExt};
+use byteorder::{LittleEndian, ReadBytesExt};
 use crc_any::CRC;
-use log::{debug};
-use mavlink::common;
+use log::debug;
+
+macro_rules! msp_payload {
+    ( $( { $name:ident $id:expr, $($field_name:ident : $field_type:ty),+ } ),+ ) => {
+        $(
+            #[derive(Debug, Copy, Clone, PartialEq)]
+            pub struct $name {
+                $( $field_name: $field_type, )+
+            }
+
+            impl MspPayloadData for $name {
+                const SIZE: usize = 0 $( + std::mem::size_of::<$field_type>() )+;
+                const ID: IdType = $id;
+
+                fn decode<R: Read>(mut r:R)->io::Result<Self>{
+                    let mut buf = [0u8; Self::SIZE];
+                    r.read_exact(&mut buf[..])?;
+                    let mut i = 0;
+                    Ok( $name {
+                        $( $field_name : {
+                                let size = std::mem::size_of::<$field_type>();
+                                i += size;
+                                <$field_type>::from_le_bytes(buf[i-size..i].try_into().unwrap())
+                        }, )+
+                    })
+                }
+
+                fn encode<W: Write>(&self, mut w: W)->io::Result<()>{
+                    $( w.write(&self.$field_name.to_le_bytes())?; )+
+                        Ok(())
+                }
+            }
+        )+
+
+        #[derive(Debug, Copy, Clone, PartialEq)]
+        pub enum MspPayload {
+            $( $name ( $name ), )+
+        }
+
+        impl MspPayloadEnum for MspPayload {
+            fn size(&self)->usize {
+                match self {
+                    $( MspPayload::$name(_)  => $name::SIZE, )+
+                }
+            }
+
+            fn decode<R: Read>(r: R, id: IdType) -> io::Result<MspPayload> {
+                match id {
+                    $( $id => match $name::decode(r) {
+                        Ok(payload) => Ok(MspPayload::$name(payload)),
+                        Err(e) => Err(e)
+                    })+
+                    _=> Err(io::Error::new(io::ErrorKind::InvalidInput, format!("unknown Msp ID {}", id)))
+                }
+            }
+
+            fn encode<W: Write>(&self, w: W)->io::Result<()>{
+                match self {
+                    $( MspPayload::$name(payload)  => payload.encode(w), )+
+                }
+            }
+        }
+    }
+}
+
+macro_rules! put {
+    ( $dest: expr, [ $( $var: expr ),* ] ) => {
+        $( &$dest.write( &$var.to_le_bytes())?; )*
+    }
+}
+
+/// Type for MSP Id
+type IdType = u16;
 
 /// Request: Master to Slave (`<`)
 /// Response: Slave to Master (`>`)
 /// Error: Master to Slave or Slave to Master (`!`)
 #[derive(Clone, Debug, PartialEq)]
-pub enum MSPDirection {
+pub enum MspDirection {
     Request,
     Response,
     Error,
 }
 
-impl From<&MSPDirection> for u8 {
-    fn from(d: &MSPDirection) -> Self {
+impl From<&MspDirection> for u8 {
+    fn from(d: &MspDirection) -> Self {
         match d {
-            MSPDirection::Request => '<' as u8,
-            MSPDirection::Response => '>' as u8,
-            MSPDirection::Error => '!' as u8,
+            MspDirection::Request => '<' as u8,
+            MspDirection::Response => '>' as u8,
+            MspDirection::Error => '!' as u8,
         }
     }
 }
 
-impl TryFrom<u8> for MSPDirection {
+impl TryFrom<u8> for MspDirection {
     type Error = io::Error;
     fn try_from(byte: u8) -> Result<Self, <Self as TryFrom<u8>>::Error> {
         match byte as char {
-            '<' => Ok(MSPDirection::Request),
-            '>' => Ok(MSPDirection::Response),
-            '!' => Ok(MSPDirection::Error),
+            '<' => Ok(MspDirection::Request),
+            '>' => Ok(MspDirection::Response),
+            '!' => Ok(MspDirection::Error),
             _ => Err(io::Error::new(
                 io::ErrorKind::InvalidInput,
-                "unknown MSP direction",
+                "unknown Msp direction",
             )),
         }
     }
@@ -47,26 +117,26 @@ impl TryFrom<u8> for MSPDirection {
 /// V1: (`M`)
 /// V2: (`X`)
 #[derive(Clone, Debug, PartialEq)]
-pub enum MSPVersion {
+pub enum MspVersion {
     V1,
     V2,
 }
 
-impl From<&MSPVersion> for u8 {
-    fn from(d: &MSPVersion) -> Self {
+impl From<&MspVersion> for u8 {
+    fn from(d: &MspVersion) -> Self {
         match d {
-            MSPVersion::V1 => 'm' as u8,
-            MSPVersion::V2 => 'x' as u8,
+            MspVersion::V1 => 'M' as u8,
+            MspVersion::V2 => 'X' as u8,
         }
     }
 }
 
-impl TryFrom<u8> for MSPVersion {
+impl TryFrom<u8> for MspVersion {
     type Error = io::Error;
     fn try_from(byte: u8) -> Result<Self, <Self as TryFrom<u8>>::Error> {
         match byte as char {
-            'M' => Ok(MSPVersion::V1),
-            'X' => Ok(MSPVersion::V2),
+            'M' => Ok(MspVersion::V1),
+            'X' => Ok(MspVersion::V2),
             _ => Err(io::Error::new(
                 io::ErrorKind::InvalidInput,
                 "unknown msp version",
@@ -75,82 +145,75 @@ impl TryFrom<u8> for MSPVersion {
     }
 }
 
-#[derive(Debug)]
-#[allow(non_camel_case_types)]
-pub enum MSPCommand {
-    MSP_IDENT = 100,
-    MSP_STATUS = 101,
-    MSP_RAW_IMU = 102,
-    MSP_SERVO = 103,
-    MSP_MOTOR = 104,
-    MSP_SET_MOTOR = 214,
-    MSP_RC = 105,
-    MSP_SET_RAW_RC = 200,
-    MSP_RAW_GPS = 106,
-    MSP_SET_RAW_GPS = 201,
-    MSP_COMP_GPS = 107,
-    MSP_ATTITUDE = 108,
-    MSP_ALTITUDE = 109,
-    MSP_ANALOG = 110,
-    MSP_RC_TUNING = 111,
-    MSP_SET_RC_TUNING = 204,
-    MSP_PID = 112,
-    MSP_SET_PID = 202,
-    MSP_BOX = 113,
-    MSP_SET_BOX = 203,
-    MSP_MISC = 114,
-    MSP_SET_MISC = 207,
-    MSP_MOTOR_PINS = 115,
-    MSP_BOXNAMES = 116,
-    MSP_PIDNAMES = 117,
-    MSP_WP = 118,
-    MSP_SET_WP = 209,
-    MSP_BOXIDS = 119,
-    MSP_SERVO_CONF = 120,
-    MSP_SET_SERVO_CONF = 212,
-    MSP_ACC_CALIBRATION = 205,
-    MSP_MAG_CALIBRATION = 206,
-    MSP_RESET_CONF = 208,
-    MSP_SELECT_SETTING = 210,
-    MSP_SET_HEAD = 211,
-    MSP_BIND = 240,
-    MSP_EEPROM_WRITE = 250,
+trait MspPayloadData {
+    const ID: IdType;
+    const SIZE: usize;
+
+    fn decode<R: Read>(r: R) -> io::Result<Self>
+    where
+        Self: std::marker::Sized;
+    fn encode<W: Write>(&self, w: W) -> io::Result<()>;
 }
 
-//impl From<&MSPCommand> for u16 {
-//    fn from(d: &MSPCommand) -> Self {
-//        match d {
-//            MSPVersion::v1 => 'm' as u8,
-//            MSPVersion::v2 => 'x' as u8,
-//        }
-//    }
-//}
-//
-//impl TryFrom<u8> for MSPCommand{
-//    type Error = io::Error;
-//    fn try_from(byte: u8) -> Result<Self, <Self as TryFrom<u8>>::Error> {
-//        match byte as char {
-//            'm' => Ok(MSPVersion::v1),
-//            'x' => Ok(MSPVersion::v2),
-//            _ => Err(io::Error::new(
-//                io::ErrorKind::invalidinput,
-//                "unknown msp version",
-//            )),
-//        }
-//    }
-//}
+trait MspPayloadEnum {
+    fn size(&self) -> usize;
+    fn decode<R: Read>(r: R, id: IdType) -> io::Result<MspPayload>;
+    fn encode<W: Write>(&self, w: W) -> io::Result<()>;
+}
 
-/// A flag may only be `Some(_)` if `version == MSPVersion::V2`
+msp_payload![
+    {MspIdent 100, version: u8, multitype: u8, msp_version: u8, capability: u32},
+    {MspStatus 101, cycle_time: u16, i2c_errors_count: u16, sensor: u16,  flag: u32,  global_conf_current_set: u8}
+//    {Msp_IDENT  100},
+//    {Msp_STATUS  101},
+//    {Msp_RAW_IMU  102},
+//    {Msp_SERVO  103},
+//    {Msp_MOTOR  104},
+//    {Msp_SET_MOTOR  214},
+//    {Msp_RC  105},
+//    {Msp_SET_RAW_RC  200},
+//    {Msp_RAW_GPS  106},
+//    {Msp_SET_RAW_GPS  201},
+//    {Msp_COMP_GPS  107},
+//    {Msp_ATTITUDE  108},
+//    {Msp_ALTITUDE  109},
+//    {Msp_ANALOG  110},
+//    {Msp_RC_TUNING  111},
+//    {Msp_SET_RC_TUNING  204},
+//    {Msp_PID  112},
+//    {Msp_SET_PID  202},
+//    {Msp_BOX  113},
+//    {Msp_SET_BOX  203},
+//    {Msp_MISC  114},
+//    {Msp_SET_MISC  207},
+//    {Msp_MOTOR_PINS  115},
+//    {Msp_BOXNAMES  116},
+//    {Msp_PIDNAMES  117},
+//    {Msp_WP  118},
+//    {Msp_SET_WP  209},
+//    {Msp_BOXIDS  119},
+//    {Msp_SERVO_CONF  120},
+//    {Msp_SET_SERVO_CONF  212},
+//    {Msp_ACC_CALIBRATION  205},
+//    {Msp_MAG_CALIBRATION  206},
+//    {Msp_RESET_CONF  208},
+//    {Msp_SELECT_SETTING  210},
+//    {Msp_SET_HEAD  211},
+//    {Msp_BIND  240},
+//    {Msp_EEPROM_WRITE  250},
+    ];
+
+/// A flag may only be `Some(_)` if `version == MspVersion::V2`
 #[derive(Clone, Debug, PartialEq)]
-pub struct MSPMessage {
-    pub version: MSPVersion,
-    pub direction: MSPDirection,
+pub struct MspMessage {
+    pub version: MspVersion,
+    pub direction: MspDirection,
     pub flag: Option<u8>,
-    pub function: u16,
-    pub payload: Vec<u8>,
+    pub function: IdType,
+    pub payload: Option<MspPayload>,
 }
 
-impl std::fmt::Display for MSPMessage {
+impl std::fmt::Display for MspMessage {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         write!(
             f,
@@ -158,51 +221,64 @@ impl std::fmt::Display for MSPMessage {
             self.direction,
             self.flag,
             self.function,
-            self.payload_to_string()
+            format!("{:?}", self.payload)
         )
     }
 }
 
-impl MSPMessage {
+impl MspMessage {
     pub fn checksum(&self) -> u8 {
         match self.version {
-            MSPVersion::V1 => {
+            MspVersion::V1 => {
                 panic!("not yet implemented");
             }
-            MSPVersion::V2 => {
+            MspVersion::V2 => {
                 let mut crc = CRC::create_crc(0xd5, 8, 0x0, 0x0, false);
                 crc.digest(&[self.flag.unwrap_or(0)]);
                 crc.digest(&self.function.to_le_bytes());
-                let payload_size = u16::try_from(self.payload.len()).expect("payload too big");
-                crc.digest(&payload_size.to_le_bytes());
-                crc.digest(&self.payload);
+                match self.payload {
+                    Some(payload) => {
+                        let mut payload_buf: Vec<u8> = Vec::new();
+                        payload.encode(&mut payload_buf).unwrap();
+                        crc.digest(&payload_buf.len().to_le_bytes());
+                        crc.digest(&payload_buf);
+                    }
+                    None => crc.digest(&0u8.to_le_bytes()),
+                }
                 u8::try_from(crc.get_crc()).unwrap()
             }
         }
     }
 
-    pub fn to_vec(&self) -> Vec<u8> {
+    pub fn encode<W: Write>(&self, mut w: W) -> io::Result<()> {
         match self.version {
-            MSPVersion::V1 => panic!("not implemented yet"),
-            MSPVersion::V2 => {
-                let mut result = Vec::with_capacity(9 + self.payload.len());
-                result.extend(b"$X");
-                result.push(u8::from(&self.direction));
-                result.push(self.flag.unwrap_or(0));
-                result.extend(&self.function.to_le_bytes()[..]);
-                let payload_size = u16::try_from(self.payload.len()).expect("payload too big");
-                result.extend(&payload_size.to_le_bytes()[..]);
-                result.extend(&self.payload);
-                result.push(self.checksum());
-                result
+            MspVersion::V1 => panic!("not implemented yet"),
+            MspVersion::V2 => {
+                put!(
+                    w,
+                    [
+                        '$' as u8,
+                        u8::from(&self.version),
+                        u8::from(&self.direction),
+                        self.flag.unwrap_or(0),
+                        self.function
+                    ]
+                );
+
+                match self.payload {
+                    Some(payload) => {
+                        let size: u16 = payload.size().try_into().expect("payload too big");
+                        put!(w, [size]);
+                        payload.encode(&mut w)?;
+                    }
+                    None => {
+                        put!(w, [0u8]);
+                    }
+                }
+                put!(w, [self.checksum()]);
             }
         }
-    }
-
-    pub fn payload_to_string(&self) -> String {
-        std::str::from_utf8(&self.payload)
-            .unwrap_or(&format!("{:?}", self.payload))
-            .to_string()
+        Ok(())
     }
 
     pub fn decode<R: Read>(mut r: R) -> io::Result<Self> {
@@ -217,12 +293,12 @@ impl MSPMessage {
         };
 
         let mut state: Option<State> = None;
-        let mut message = MSPMessage {
-            version: MSPVersion::V1,
-            direction: MSPDirection::Error,
+        let mut message = MspMessage {
+            version: MspVersion::V1,
+            direction: MspDirection::Error,
             flag: None,
             function: 0,
-            payload: Vec::new(),
+            payload: None,
         };
 
         loop {
@@ -230,11 +306,11 @@ impl MSPMessage {
             match state {
                 Some(State::Header) => {
                     state = None;
-                    message.version = MSPVersion::try_from(r.read_u8()?)?;
-                    message.direction = MSPDirection::try_from(r.read_u8()?)?;
+                    message.version = MspVersion::try_from(r.read_u8()?)?;
+                    message.direction = MspDirection::try_from(r.read_u8()?)?;
                     state = match message.version {
-                        MSPVersion::V1 => Some(State::V1Fields),
-                        MSPVersion::V2 => Some(State::V2Fields),
+                        MspVersion::V1 => Some(State::V1Fields),
+                        MspVersion::V2 => Some(State::V2Fields),
                     };
                 }
                 Some(State::V1Fields) => {
@@ -256,11 +332,11 @@ impl MSPMessage {
                     let payload_size = r.read_u16::<LittleEndian>()? as usize;
                     state = Some(State::Payload(payload_size));
                 }
-                Some(State::Payload(payload_size)) => {
-                    message.payload.resize(payload_size, 0);
-                    r.read_exact(&mut message.payload)?;
+                Some(State::Payload(payload_size)) if payload_size > 0 => {
+                    message.payload = Some(MspPayload::decode(&mut r, message.function)?);
                     state = Some(State::Checksum);
                 }
+                Some(State::Payload(_)) => state = Some(State::Checksum),
                 Some(State::Checksum) => {
                     state = None;
                     match message.checksum() == r.read_u8()? {
@@ -268,7 +344,7 @@ impl MSPMessage {
                         false => {
                             return Err(io::Error::new(
                                 io::ErrorKind::InvalidInput,
-                                "wrong MSP checksum",
+                                "wrong Msp checksum",
                             ))
                         }
                     }
@@ -278,49 +354,30 @@ impl MSPMessage {
                         state = Some(State::Header);
                     }
                 }
-                _ => {}
             }
         }
     }
 }
 
-pub struct MSPConnection<T: Read + Write> {
-    socket_cell: RefCell<T>,
+pub trait MspConnection {
+    fn request(self, msg: &MspMessage) -> io::Result<MspMessage>;
 }
 
-impl<T: Read + Write> MSPConnection<T> {
-    pub fn new(socket: T) -> Self {
-        debug!("setting up new MSPConnection");
-        MSPConnection {
-            socket_cell: RefCell::new(socket),
-        }
-    }
-
-    pub fn request(&mut self, msg: &MSPMessage) -> Result<MSPMessage, io::Error> {
+impl<T: Read + Write> MspConnection for T
+where
+    T: Read + Write,
+{
+    fn request(mut self, msg: &MspMessage) -> io::Result<MspMessage> {
         let now = std::time::SystemTime::now();
-        let socket = self.socket_cell.get_mut();
 
-        let buf = msg.to_vec();
-        //msg.encode(&socket);
-        socket.write(&buf)?;
-        socket.flush()?;
+        msg.encode(&mut self)?;
+        self.flush()?;
 
-        let response = MSPMessage::decode(socket)?;
+        let response = MspMessage::decode(&mut self)?;
 
-        debug!("time spent on MSP Request: {:?}", now.elapsed().unwrap());
+        debug!("time spent on Msp Request: {:?}", now.elapsed().unwrap());
 
         Ok(response)
-    }
-
-    pub fn generate_mav_message(&mut self, _id: u32) -> Option<common::MavMessage> {
-        Some(common::MavMessage::HEARTBEAT(common::HEARTBEAT_DATA {
-            custom_mode: 0,
-            mavtype: mavlink::common::MavType::MAV_TYPE_QUADROTOR,
-            autopilot: mavlink::common::MavAutopilot::MAV_AUTOPILOT_ARDUPILOTMEGA,
-            base_mode: mavlink::common::MavModeFlag::MAV_MODE_FLAG_SAFETY_ARMED,
-            system_status: mavlink::common::MavState::MAV_STATE_ACTIVE,
-            mavlink_version: 0x3,
-        }))
     }
 }
 
@@ -330,15 +387,15 @@ impl<T: Read + Write> MSPConnection<T> {
 //
 //    #[test]
 //    fn pure_bytes_to_mspv2() {
-//        let mut codec = MSPCodec::new();
+//        let mut codec = MspCodec::new();
 //        let mut buf = BytesMut::From(vec![
 //                                     0x24u8, 0x58, 0x3e, 0xa5, 0x42, 0x42, 0x12, 0x00, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20,
 //                                     0x66, 0x6c, 0x79, 0x69, 0x6e, 0x67, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x82,
 //        ]);
 //
-//        let expected = MSPMessage {
-//            version: MSPVersion::V2,
-//            direction: MSPDirection::Response,
+//        let expected = MspMessage {
+//            version: MspVersion::V2,
+//            direction: MspDirection::Response,
 //            flag: Some(0xa5),
 //            function: 0x4242,
 //            payload: "Hello flying world".as_bytes().to_vec(),
@@ -349,23 +406,23 @@ impl<T: Read + Write> MSPConnection<T> {
 //
 //    #[test]
 //    fn pure_bytes_to_multiple_mspv2() {
-//        let mut codec = MSPCodec::new();
+//        let mut codec = MspCodec::new();
 //        let mut buf = BytesMut::From(vec![
 //                                     0x24u8, 0x58, 0x3c, 0x00, 0x64, 0x00, 0x00, 0x00, 0x8f, 0x24, 0x58, 0x3e, 0xa5, 0x42,
 //                                     0x42, 0x12, 0x00, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x66, 0x6c, 0x79, 0x69, 0x6e,
 //                                     0x67, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x82,
 //        ]);
 //
-//        let message_1 = MSPMessage {
-//            version: MSPVersion::V2,
-//            direction: MSPDirection::Request,
+//        let message_1 = MspMessage {
+//            version: MspVersion::V2,
+//            direction: MspDirection::Request,
 //            flag: Some(0),
 //            function: 100,
 //            payload: vec![0u8; 0],
 //        };
-//        let message_2 = MSPMessage {
-//            version: MSPVersion::V2,
-//            direction: MSPDirection::Response,
+//        let message_2 = MspMessage {
+//            version: MspVersion::V2,
+//            direction: MspDirection::Response,
 //            flag: Some(0xa5),
 //            function: 0x4242,
 //            payload: "Hello flying world".as_bytes().to_vec(),
@@ -378,16 +435,16 @@ impl<T: Read + Write> MSPConnection<T> {
 //
 //    #[test]
 //    fn noised_bytes_to_mspv2() {
-//        let mut codec = MSPCodec::new();
+//        let mut codec = MspCodec::new();
 //        let mut buf = BytesMut::From(vec![
 //                                     0x30, 0x60, 0x13, 0x24, 0x58, 0x3e, 0xa5, 0x42, 0x42, 0x12, 0x00, 0x48, 0x65, 0x6c,
 //                                     0x6c, 0x6f, 0x20, 0x66, 0x6c, 0x79, 0x69, 0x6e, 0x67, 0x20, 0x77, 0x6f, 0x72, 0x6c,
 //                                     0x64, 0x82, 0x25,
 //        ]);
 //
-//        let expected = MSPMessage {
-//            version: MSPVersion::V2,
-//            direction: MSPDirection::Response,
+//        let expected = MspMessage {
+//            version: MspVersion::V2,
+//            direction: MspDirection::Response,
 //            flag: Some(0xa5),
 //            function: 0x4242,
 //            payload: "Hello flying world".as_bytes().to_vec(),
@@ -398,10 +455,10 @@ impl<T: Read + Write> MSPConnection<T> {
 //
 //    #[test]
 //    fn pure_bytes_to_mspv2_partial() {
-//        let mut codec = MSPCodec::new();
-//        let expected = MSPMessage {
-//            version: MSPVersion::V2,
-//            direction: MSPDirection::Response,
+//        let mut codec = MspCodec::new();
+//        let expected = MspMessage {
+//            version: MspVersion::V2,
+//            direction: MspDirection::Response,
 //            flag: Some(0xa5),
 //            function: 0x4242,
 //            payload: "Hello flying world".as_bytes().to_vec(),
@@ -425,13 +482,13 @@ impl<T: Read + Write> MSPConnection<T> {
 //
 //    #[test]
 //    fn pure_bytes_to_mspv2_checksum_error() {
-//        let mut codec = MSPCodec::new();
+//        let mut codec = MspCodec::new();
 //        let mut buf = BytesMut::From(vec![
 //                                     0x24u8, 0x58, 0x3e, 0xa5, 0x42, 0x42, 0x12, 0x00, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20,
 //                                     0x66, 0x6c, 0x79, 0x69, 0x6e, 0x67, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x81,
 //        ]);
 //
-//        let expected = io::Error::new(io::ErrorKind::InvalidInput, "wrong MSP checksum");
+//        let expected = io::Error::new(io::ErrorKind::InvalidInput, "wrong Msp checksum");
 //        let result = codec.decode(&mut buf).unwrap_err();
 //        assert_eq!(expected.kind(), result.kind());
 //        assert_eq!(format!("{}", expected), format!("{}", result));
@@ -439,12 +496,12 @@ impl<T: Read + Write> MSPConnection<T> {
 //
 //    #[test]
 //    fn mspv2_to_bytes() {
-//        let mut codec = MSPCodec::new();
+//        let mut codec = MspCodec::new();
 //        let mut buf = BytesMut::new();
 //
-//        let msp = MSPMessage {
-//            version: MSPVersion::V2,
-//            direction: MSPDirection::Response,
+//        let msp = MspMessage {
+//            version: MspVersion::V2,
+//            direction: MspDirection::Response,
 //            flag: Some(0xa5),
 //            function: 0x4242,
 //            payload: "Hello flying world".as_bytes().to_vec(),
