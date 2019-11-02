@@ -1,9 +1,10 @@
 use std::clone::Clone;
 use std::convert::{TryFrom, TryInto};
 use std::io::{self, Read, Write};
+use std::mem::size_of;
 
 //use bytes::{Buf, BufMut, BytesMut, IntoBuf, Writer};
-use byteorder::{LittleEndian, ReadBytesExt};
+//use byteorder::{LittleEndian, ReadBytesExt};
 use crc_any::CRC;
 use log::debug;
 
@@ -11,43 +12,100 @@ macro_rules! msp_payload {
     ( $( { $name:ident $id:expr, $($field_name:ident : $field_type:ty),+ } ),+ ) => {
         $(
             #[derive(Debug, Copy, Clone, PartialEq)]
+            #[allow(non_snake_case)]
             pub struct $name {
                 $( $field_name: $field_type, )+
             }
 
             impl MspPayloadData for $name {
-                const SIZE: usize = 0 $( + std::mem::size_of::<$field_type>() )+;
+                const SIZE: usize = 0 $( + size_of::<$field_type>() )+;
                 const ID: IdType = $id;
 
-                fn decode<R: Read>(mut r:R)->io::Result<Self>{
-                    let mut buf = [0u8; Self::SIZE];
-                    r.read_exact(&mut buf[..])?;
-                    let mut i = 0;
-                    Ok( $name {
-                        $( $field_name : {
-                                let size = std::mem::size_of::<$field_type>();
+                 fn decode<R: Read>(mut r:R)->io::Result<Self>{
+                     let mut buf = [0u8; Self::SIZE];
+                     r.read_exact(&mut buf[..])?;
+                     let mut i = 0;
+                     Ok( $name {
+                         $( $field_name : {
+                                 let size = size_of::<$field_type>();
                                 i += size;
-                                <$field_type>::from_le_bytes(buf[i-size..i].try_into().unwrap())
-                        }, )+
-                    })
-                }
+                                 <$field_type>::from_le_bytes(buf[i-size..i].try_into().unwrap())
+                         }, )+
+                     })
+                 }
+
 
                 fn encode<W: Write>(&self, mut w: W)->io::Result<()>{
-                    $( w.write(&self.$field_name.to_le_bytes())?; )+
-                        Ok(())
+                    let mut buf = [0u8; Self::SIZE];
+                    let mut i = 0;
+                    $(
+                    let size = size_of::<$field_type>();
+                    i+=size;
+                    buf[i-size..i].copy_from_slice(&self.$field_name.to_le_bytes()[..]);
+                    )+
+                    w.write_all(&buf[..])
                 }
+//                     fn encode<W: Write>(&self, mut w: W)->io::Result<()>{
+//
+//                         $( w.write_all(&self.$field_name.to_le_bytes())?;)+
+//
+//                         Ok(())
+//                     }
             }
+
         )+
+
+        #[cfg(test)]
+        mod test {
+            $( mod $name {
+                use rand::random;
+
+                use super::super::*;
+
+                #[test]
+                fn encode_decode_test(){
+                    let mut buf: Vec<u8> = Vec::new();
+                    let payload = $name { $( $field_name : random(), )+ };
+                    payload.encode(&mut buf).expect("unable to encode");
+                    let new_payload = $name::decode(&mut &buf[..]).expect("unable to decode");
+                    let mut new_buf: Vec<u8> = Vec::new();
+                    new_payload.encode(&mut new_buf).expect("unable to encode");
+                    assert_eq!(payload, new_payload);
+                    assert_eq!(buf, new_buf);
+                }
+
+                #[test]
+                fn message_encode_decode_test(){
+                    let mut buf: Vec<u8> = Vec::new();
+                    let message = MspMessage {
+                         version: MspVersion::V2,
+                         direction: MspDirection::Response,
+                         flag: Some(random()),
+                         function: $id,
+                         payload: Some(MspPayload::$name( $name { $( $field_name : random(), )+ })),
+                    };
+                    message.encode(&mut buf).expect("unable to encode");
+                    let new_message = MspMessage::decode(&mut &buf[..]).expect("unable to decode");
+                    let mut new_buf: Vec<u8> = Vec::new();
+                    new_message.encode(&mut new_buf).expect("unable to encode");
+                    assert_eq!(message, new_message);
+                    assert_eq!(buf, new_buf);
+                }
+
+            })+
+        }
 
         #[derive(Debug, Copy, Clone, PartialEq)]
         pub enum MspPayload {
             $( $name ( $name ), )+
+            Empty,
         }
 
         impl MspPayloadEnum for MspPayload {
             fn size(&self)->usize {
                 match self {
                     $( MspPayload::$name(_)  => $name::SIZE, )+
+                    MspPayload::Empty => 0,
                 }
             }
 
@@ -57,23 +115,26 @@ macro_rules! msp_payload {
                         Ok(payload) => Ok(MspPayload::$name(payload)),
                         Err(e) => Err(e)
                     })+
-                    _=> Err(io::Error::new(io::ErrorKind::InvalidInput, format!("unknown Msp ID {}", id)))
+                    _=> Err(io::Error::new(io::ErrorKind::InvalidInput, format!("unknown MSP ID {}", id)))
                 }
             }
 
             fn encode<W: Write>(&self, w: W)->io::Result<()>{
                 match self {
                     $( MspPayload::$name(payload)  => payload.encode(w), )+
+                    MspPayload::Empty => Ok(()),
                 }
             }
         }
     }
 }
 
-macro_rules! put {
-    ( $dest: expr, [ $( $var: expr ),* ] ) => {
-        $( &$dest.write( &$var.to_le_bytes())?; )*
-    }
+macro_rules! get {
+    ( $src: expr, $type:ty ) => {{
+        let mut buf = [0u8; size_of::<$type>()];
+        $src.read_exact(&mut buf[..])?;
+        <$type>::from_le_bytes(buf[..].try_into().unwrap())
+    }};
 }
 
 /// Type for MSP Id
@@ -145,7 +206,7 @@ impl TryFrom<u8> for MspVersion {
     }
 }
 
-trait MspPayloadData {
+pub trait MspPayloadData {
     const ID: IdType;
     const SIZE: usize;
 
@@ -162,11 +223,11 @@ trait MspPayloadEnum {
 }
 
 msp_payload![
-    {MspIdent 100, version: u8, multitype: u8, msp_version: u8, capability: u32},
-    {MspStatus 101, cycle_time: u16, i2c_errors_count: u16, sensor: u16,  flag: u32,  global_conf_current_set: u8}
+    { MspIdent 100, version: u8, multitype: u8, msp_version: u8, capability: u32},
+    { MspStatus 101, cycle_time: u16, i2c_errors_count: u16, sensor: u16,  flag: u32,  global_conf_current_set: u8 },
 //    {Msp_IDENT  100},
 //    {Msp_STATUS  101},
-//    {Msp_RAW_IMU  102},
+    { MspRawImu 102, accx: i16, accy: i16, accz: i16, gyrx: i16, gyry: i16, gyrz: i16, magx: i16, magy: i16, magz: i16 }
 //    {Msp_SERVO  103},
 //    {Msp_MOTOR  104},
 //    {Msp_SET_MOTOR  214},
@@ -210,7 +271,7 @@ pub struct MspMessage {
     pub direction: MspDirection,
     pub flag: Option<u8>,
     pub function: IdType,
-    pub payload: Option<MspPayload>,
+    pub payload: MspPayload,
 }
 
 impl std::fmt::Display for MspMessage {
@@ -236,15 +297,14 @@ impl MspMessage {
                 let mut crc = CRC::create_crc(0xd5, 8, 0x0, 0x0, false);
                 crc.digest(&[self.flag.unwrap_or(0)]);
                 crc.digest(&self.function.to_le_bytes());
-                match self.payload {
-                    Some(payload) => {
-                        let mut payload_buf: Vec<u8> = Vec::new();
-                        payload.encode(&mut payload_buf).unwrap();
-                        crc.digest(&payload_buf.len().to_le_bytes());
-                        crc.digest(&payload_buf);
-                    }
-                    None => crc.digest(&0u8.to_le_bytes()),
-                }
+
+                let size: u16 = self.payload.size().try_into().expect("payload too big");
+                let mut payload_buf: Vec<u8> = Vec::new();
+                crc.digest(&size.to_le_bytes());
+                self.payload
+                    .encode(&mut payload_buf)
+                    .expect("unable to encode payload");
+                crc.digest(&payload_buf);
                 u8::try_from(crc.get_crc()).unwrap()
             }
         }
@@ -254,28 +314,18 @@ impl MspMessage {
         match self.version {
             MspVersion::V1 => panic!("not implemented yet"),
             MspVersion::V2 => {
-                put!(
-                    w,
-                    [
-                        '$' as u8,
-                        u8::from(&self.version),
-                        u8::from(&self.direction),
-                        self.flag.unwrap_or(0),
-                        self.function
-                    ]
-                );
-
-                match self.payload {
-                    Some(payload) => {
-                        let size: u16 = payload.size().try_into().expect("payload too big");
-                        put!(w, [size]);
-                        payload.encode(&mut w)?;
-                    }
-                    None => {
-                        put!(w, [0u8]);
-                    }
-                }
-                put!(w, [self.checksum()]);
+                const S: usize = size_of::<IdType>();
+                let mut buf = [0u8; 6 + size_of::<IdType>()];
+                buf[0] = '$' as u8;
+                buf[1] = u8::from(&self.version);
+                buf[2] = u8::from(&self.direction);
+                buf[3] = self.flag.unwrap_or(0);
+                buf[4..4 + S].copy_from_slice(&self.function.to_le_bytes()[..]);
+                let payload_size: u16 = self.payload.size().try_into().expect("payload too big");
+                buf[4 + S..].copy_from_slice(&payload_size.to_le_bytes()[..]);
+                w.write_all(&buf[..])?;
+                self.payload.encode(&mut w)?;
+                w.write_all(&self.checksum().to_le_bytes()[..])?;
             }
         }
         Ok(())
@@ -298,59 +348,59 @@ impl MspMessage {
             direction: MspDirection::Error,
             flag: None,
             function: 0,
-            payload: None,
+            payload: MspPayload::Empty,
         };
+
 
         loop {
             debug!("state: {:?}, message: {:?}", state, message);
             match state {
                 Some(State::Header) => {
-                    state = None;
-                    message.version = MspVersion::try_from(r.read_u8()?)?;
-                    message.direction = MspDirection::try_from(r.read_u8()?)?;
-                    state = match message.version {
-                        MspVersion::V1 => Some(State::V1Fields),
-                        MspVersion::V2 => Some(State::V2Fields),
-                    };
+                    message.version = MspVersion::try_from(get!(r, u8))?;
+                    message.direction = MspDirection::try_from(get!(r, u8))?;
+                    state = Some(match message.version {
+                        MspVersion::V1 => State::V1Fields,
+                        MspVersion::V2 => State::V2Fields,
+                    });
                 }
                 Some(State::V1Fields) => {
                     message.flag = None;
-                    let payload_size = r.read_u8()? as usize;
-                    message.function = r.read_u16::<LittleEndian>()?;
-                    state = match payload_size {
-                        255 => Some(State::Jumbo),
-                        _ => Some(State::Payload(payload_size)),
-                    };
+                    let payload_size = get!(r, u8) as usize;
+                    message.function = get!(r, u16);
+                    state = Some(match payload_size {
+                        255 => State::Jumbo,
+                        _ => State::Payload(payload_size),
+                    });
                 }
                 Some(State::V2Fields) => {
-                    message.flag = Some(r.read_u8()?);
-                    message.function = r.read_u16::<LittleEndian>()?;
-                    let payload_size = r.read_u16::<LittleEndian>()? as usize;
-                    state = Some(State::Payload(payload_size));
+                    message.flag = Some(get!(r, u8));
+                    message.function = get!(r, u16);
+                    let payload_size = get!(r, u16) as usize;
+                    state = Some(match payload_size {
+                        0 => State::Checksum,
+                        _ => State::Payload(payload_size),
+                    });
                 }
                 Some(State::Jumbo) => {
-                    let payload_size = r.read_u16::<LittleEndian>()? as usize;
+                    let payload_size = get!(r, u16) as usize;
                     state = Some(State::Payload(payload_size));
                 }
                 Some(State::Payload(payload_size)) if payload_size > 0 => {
-                    message.payload = Some(MspPayload::decode(&mut r, message.function)?);
+                    message.payload = MspPayload::decode(&mut r, message.function)?;
                     state = Some(State::Checksum);
                 }
                 Some(State::Payload(_)) => state = Some(State::Checksum),
-                Some(State::Checksum) => {
-                    state = None;
-                    match message.checksum() == r.read_u8()? {
-                        true => return Ok(message.clone()),
-                        false => {
-                            return Err(io::Error::new(
-                                io::ErrorKind::InvalidInput,
-                                "wrong Msp checksum",
-                            ))
-                        }
+                Some(State::Checksum) => match message.checksum() == get!(r, u8) {
+                    true => return Ok(message.clone()),
+                    false => {
+                        return Err(io::Error::new(
+                            io::ErrorKind::InvalidInput,
+                            "wrong Msp checksum",
+                        ))
                     }
-                }
+                },
                 None => {
-                    if r.read_u8()? as char == '$' {
+                    if get!(r, u8) as char == '$' {
                         state = Some(State::Header);
                     }
                 }
@@ -368,42 +418,46 @@ where
     T: Read + Write,
 {
     fn request(mut self, msg: &MspMessage) -> io::Result<MspMessage> {
-        let now = std::time::SystemTime::now();
-
+        let t_start = std::time::Instant::now();
         msg.encode(&mut self)?;
-        self.flush()?;
-
+        let t_encode = t_start.elapsed();
         let response = MspMessage::decode(&mut self)?;
-
-        debug!("time spent on Msp Request: {:?}", now.elapsed().unwrap());
-
+        let t_total = t_start.elapsed();
+        debug!(
+            "time spent: total {:?} encode {:?}, decode {:?}",
+            t_total,
+            t_encode,
+            t_total - t_encode
+        );
         Ok(response)
     }
 }
 
-//#[cfg(test)]
-//mod test {
-//    use super::*;
-//
-//    #[test]
-//    fn pure_bytes_to_mspv2() {
-//        let mut codec = MspCodec::new();
-//        let mut buf = BytesMut::From(vec![
-//                                     0x24u8, 0x58, 0x3e, 0xa5, 0x42, 0x42, 0x12, 0x00, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20,
-//                                     0x66, 0x6c, 0x79, 0x69, 0x6e, 0x67, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x82,
-//        ]);
-//
-//        let expected = MspMessage {
-//            version: MspVersion::V2,
-//            direction: MspDirection::Response,
-//            flag: Some(0xa5),
-//            function: 0x4242,
-//            payload: "Hello flying world".as_bytes().to_vec(),
-//        };
-//        let result = codec.decode(&mut buf);
-//        assert_eq!(expected, result.unwrap().unwrap());
-//    }
-//
+#[cfg(test)]
+mod test_manual {
+    use super::*;
+
+    #[test]
+    fn pure_bytes_to_mspv2() {
+        let buf = [0x24u8, 0x58, 0x3c, 0x0, 0x64, 0x0, 0x00, 0x00, 0x8f];
+
+        let message = MspMessage {
+            version: MspVersion::V2,
+            direction: MspDirection::Request,
+            flag: Some(0),
+            function: 100,
+            payload: None,
+        };
+        let new_message = MspMessage::decode(&buf[..]).expect("unable to decode new_message");
+        let mut new_buf = [0u8; 9];
+        message
+            .encode(&mut new_buf[..])
+            .expect("unable to encode message");
+
+        assert_eq!(message, new_message);
+        assert_eq!(buf, new_buf);
+    }
+}
 //    #[test]
 //    fn pure_bytes_to_multiple_mspv2() {
 //        let mut codec = MspCodec::new();
