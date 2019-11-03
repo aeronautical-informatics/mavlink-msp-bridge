@@ -73,11 +73,10 @@ impl<T: MspConnection> MavGenerator for T {
     fn generate(&mut self, id: u32) -> io::Result<MavMessage> {
         match id {
             0 => {
-                let msg = self.request(msp_message!(MspIdent));
                 Ok(HEARTBEAT(HEARTBEAT_DATA {
                     custom_mode: 0,
-                    mavtype: MavType::MAV_TYPE_QUADROTOR,
-                    autopilot: MavAutopilot::MAV_AUTOPILOT_ARDUPILOTMEGA, //MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY,
+                    mavtype: MavType::MAV_TYPE_GENERIC,
+                    autopilot: MavAutopilot::MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY,
                     base_mode: MavModeFlag::empty(),
                     system_status: MavState::MAV_STATE_STANDBY,
                     mavlink_version: 0x3,

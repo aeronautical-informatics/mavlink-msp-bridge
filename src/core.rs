@@ -1,6 +1,6 @@
 use std::io;
 
-use std::time::Duration;
+use std::time::{Instant, Duration};
 
 use log::{debug, error, info, trace};
 
@@ -13,6 +13,10 @@ use crate::scheduler::Schedule;
 use crate::Config;
 
 pub fn event_loop(conf: &Config) {
+    // initializes stratum null
+    let t0 = Instant::now();
+
+    // initializes the MSP connection
     let mut mspconn =
         serialport::open(&conf.msp_serialport).expect("unable to open serial SERIALPORT");
     mspconn
@@ -23,32 +27,40 @@ pub fn event_loop(conf: &Config) {
         .expect("unable to clear serial connection");
     info!("MSP connection opened on {}", mspconn.name().unwrap());
 
+    // testing wether MSP connection is attached to MSP FC
     let msg = msp_message!(MspIdent);
-
     let resp = mspconn.request(msg).expect("unable to receive response");
     info!("MspIdent received: {:?}", resp.payload);
 
+    // initializes MAV connection
     info!("waiting for MAVLink connection");
     let mavconn = WrappedMAVConnection::new(&conf.mavlink_listen);
     info!("MAVLink connection opened on {}", &conf.mavlink_listen);
 
+    
+    // initializes scheduler and inserts HEARTBEAT task
     let mut schedule = Schedule::new(50);
     schedule
         .insert(1, 0)
-        .expect("unable to insert heartbeat in scheduler"); // insert heartbeat at 1 Hz
-
+        .expect("unable to insert heartbeat in scheduler");
+    
+    
     schedule.insert(5, 30); //debug
+ 
+    // enters eventloop to process scheduled messages and incoming messages
     info!("entering event_loop");
     loop {
         match schedule.next() {
+            // some MAV message is scheduled to be sent now
             Some(id) => {
-                debug!("processing task {}", id);
+                trace!("processing task {}", id);
 
                 let message = mspconn
                     .generate(id)
                     .expect("message could not be generated");
                 mavconn.send(&message);
             }
+            // no scheduled MAV message, checking for incoming MAV message
             None => match mavconn.recv_timeout(Duration::from_millis(1)) {
                 Ok((_header, msg)) => {
                     match msg {

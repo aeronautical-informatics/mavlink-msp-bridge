@@ -411,6 +411,7 @@ impl MspMessage {
 
 pub trait MspConnection {
     fn request(&mut self, msg: &MspMessage) -> io::Result<MspMessage>;
+    fn fetch_payload<T>(&mut self)-> io::Result<MspPayload>;
 }
 
 impl<T: Read + Write> MspConnection for T
@@ -430,6 +431,10 @@ where
             t_total - t_encode
         );
         Ok(response)
+    }
+    
+    fn fetch_payload<T: MspPayloadData>(&mut self)-> io::Result<MspPayload> {
+            let mst = self.request(
     }
 }
 
