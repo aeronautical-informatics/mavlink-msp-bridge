@@ -1,24 +1,30 @@
 use std::env;
+use std::time::Instant;
 
 use clap::{value_t_or_exit, App, Arg};
 use log::{debug, error, info};
 use serialport::available_ports;
 
+#[macro_use]
+mod msp;
 mod core;
 mod mavlink;
-mod msp;
 mod scheduler;
 mod serial;
 
 #[derive(Debug)]
 pub struct Config {
+    t0: Instant,
     mavlink_listen: String,
     msp_serialport: String,
     msp_baud: u32,
 }
 
 fn main() {
-    env::set_var("RUST_LOG", "debug");
+    env::set_var(
+        "RUST_LOG",
+        env::var("RUST_LOG").unwrap_or("debug".to_string()),
+    );
     env_logger::init();
     let matches = App::new(env!("CARGO_PKG_NAME"))
         .version(env!("CARGO_PKG_VERSION"))
@@ -34,7 +40,7 @@ fn main() {
                 .short("b")
                 .long("baud")
                 .help("Baud rate for the serial port")
-                .default_value("9600"),
+                .default_value("115200"),
         )
         .arg(
             Arg::with_name("mavlink")
@@ -58,6 +64,7 @@ fn main() {
     }
 
     let conf = Config {
+        t0: Instant::now(),
         mavlink_listen: matches.value_of("mavlink").unwrap().to_string(),
         msp_serialport: matches
             .value_of("serial")

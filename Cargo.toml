@@ -6,7 +6,6 @@ edition = "2018"
 license = "MIT"
 
 [dependencies]
-byteorder = "1"
 clap = "2"
 crc-any = "1.1"
 env_logger = "0.6"
@@ -15,3 +14,6 @@ lazy_static = "1.3.0"
 log = "0.4"
 mavlink = "0.5"
 serialport = "3.2"
+
+[dev-dependencies]
+rand = "0.7"
