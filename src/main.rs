@@ -16,6 +16,7 @@ mod serial;
 pub struct Config {
     t0: Instant,
     mavlink_listen: String,
+    mavlink_system_id: u8,
     msp_serialport: String,
     msp_baud: u32,
 }
@@ -51,6 +52,13 @@ fn main() {
                 .default_value("tcpin:0.0.0.0:5760"),
         )
         .arg(
+            Arg::with_name("mavlink-system-id")
+                .short("i")
+                .long("mavlink-system-id")
+                .help("sytemd_id to use for the virtual drone")
+                .default_value("1"),
+        )
+        .arg(
             Arg::with_name("list-serialports")
                 .short("l")
                 .long("list-serial")
@@ -76,8 +84,8 @@ fn main() {
                 }
             })
             .to_string(),
-
         msp_baud: value_t_or_exit!(matches.value_of("baud"), u32),
+        mavlink_system_id: value_t_or_exit!(matches.value_of("mavlink-system-id"), u8),
     };
 
     info!("started");
