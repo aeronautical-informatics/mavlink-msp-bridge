@@ -1,0 +1,823 @@
+    Finished dev [unoptimized + debuginfo] target(s) in 0.05s
+     Running `target/debug/mavlink-msp-bridge /dev/ttyACM0`
+[2019-11-18T10:12:44Z INFO  mavlink_msp_bridge] started
+[2019-11-18T10:12:44Z DEBUG mavlink_msp_bridge] Config { mavlink_listen: "tcpin:0.0.0.0:5760", mavlink_system_id: 1, msp_serialport: "/dev/ttyACM0", msp_baud: 115200 }
+[2019-11-18T10:12:44Z TRACE mavlink_msp_bridge::msp] time spent: total 23.134072ms encode 214.023µs, decode 22.920049ms
+[2019-11-18T10:12:44Z DEBUG mavlink_msp_bridge::core] MspIdent received MspIdent { version: 231, multitype: 3, msp_version: 0, capability: 2147483708 }
+[2019-11-18T10:12:44Z INFO  mavlink_msp_bridge::core] MSP connection opened on /dev/ttyACM0
+[2019-11-18T10:12:44Z INFO  mavlink_msp_bridge::core] waiting for MAVLink connection
+[2019-11-18T10:12:48Z INFO  mavlink_msp_bridge::core] MAVLink connection opened on tcpin:0.0.0.0:5760
+[2019-11-18T10:12:48Z INFO  mavlink_msp_bridge::core] entering event_loop
+[2019-11-18T10:12:48Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:48Z TRACE mavlink_msp_bridge::msp] time spent: total 15.786232ms encode 226.994µs, decode 15.559238ms
+[2019-11-18T10:12:48Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.19198622, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:48Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 39 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:12:48Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:48Z TRACE mavlink_msp_bridge::msp] time spent: total 15.841395ms encode 222.007µs, decode 15.619388ms
+[2019-11-18T10:12:48Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.19198622, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:49Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:49Z TRACE mavlink_msp_bridge::msp] time spent: total 15.514243ms encode 222.997µs, decode 15.291246ms
+[2019-11-18T10:12:49Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.19198622, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:49Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:49Z TRACE mavlink_msp_bridge::msp] time spent: total 15.282389ms encode 238.77µs, decode 15.043619ms
+[2019-11-18T10:12:49Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.19198622, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:49Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:49Z TRACE mavlink_msp_bridge::msp] time spent: total 20.0885ms encode 233.899µs, decode 19.854601ms
+[2019-11-18T10:12:49Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.19198622, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:49Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:12:49Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:12:49Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:49Z TRACE mavlink_msp_bridge::msp] time spent: total 20.718151ms encode 231.293µs, decode 20.486858ms
+[2019-11-18T10:12:49Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.19198622, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:49Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 40 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:12:49Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:49Z TRACE mavlink_msp_bridge::msp] time spent: total 20.186715ms encode 233.064µs, decode 19.953651ms
+[2019-11-18T10:12:49Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.19198622, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:50Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:50Z TRACE mavlink_msp_bridge::msp] time spent: total 20.821451ms encode 233.91µs, decode 20.587541ms
+[2019-11-18T10:12:50Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.19198622, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:50Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:50Z TRACE mavlink_msp_bridge::msp] time spent: total 20.063778ms encode 223.485µs, decode 19.840293ms
+[2019-11-18T10:12:50Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.19198622, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:50Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:50Z TRACE mavlink_msp_bridge::msp] time spent: total 20.22169ms encode 214.213µs, decode 20.007477ms
+[2019-11-18T10:12:50Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.19198622, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:50Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:12:50Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:12:50Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:50Z TRACE mavlink_msp_bridge::msp] time spent: total 10.825973ms encode 207.045µs, decode 10.618928ms
+[2019-11-18T10:12:50Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.19198622, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:50Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 41 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:12:50Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:50Z TRACE mavlink_msp_bridge::msp] time spent: total 14.992581ms encode 215.89µs, decode 14.776691ms
+[2019-11-18T10:12:50Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.19198622, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:51Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:51Z TRACE mavlink_msp_bridge::msp] time spent: total 15.335186ms encode 225.095µs, decode 15.110091ms
+[2019-11-18T10:12:51Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.19198622, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:51Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:51Z TRACE mavlink_msp_bridge::msp] time spent: total 15.120908ms encode 247.733µs, decode 14.873175ms
+[2019-11-18T10:12:51Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.19198622, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:51Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:51Z TRACE mavlink_msp_bridge::msp] time spent: total 15.288041ms encode 270.529µs, decode 15.017512ms
+[2019-11-18T10:12:51Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.19198622, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:51Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:12:51Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:12:51Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:51Z TRACE mavlink_msp_bridge::msp] time spent: total 15.626476ms encode 614.29µs, decode 15.012186ms
+[2019-11-18T10:12:51Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.19198622, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:51Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 42 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:12:51Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:51Z TRACE mavlink_msp_bridge::msp] time spent: total 15.17198ms encode 238.574µs, decode 14.933406ms
+[2019-11-18T10:12:51Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.20943952, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:52Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:52Z TRACE mavlink_msp_bridge::msp] time spent: total 20.43106ms encode 227.354µs, decode 20.203706ms
+[2019-11-18T10:12:52Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.20943952, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:52Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:52Z TRACE mavlink_msp_bridge::msp] time spent: total 20.531606ms encode 242.449µs, decode 20.289157ms
+[2019-11-18T10:12:52Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.20943952, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:52Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:52Z TRACE mavlink_msp_bridge::msp] time spent: total 20.467475ms encode 216.035µs, decode 20.25144ms
+[2019-11-18T10:12:52Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.20943952, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:52Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:12:52Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:12:52Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:52Z TRACE mavlink_msp_bridge::msp] time spent: total 20.251311ms encode 223.33µs, decode 20.027981ms
+[2019-11-18T10:12:52Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.20943952, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:52Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 43 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:12:52Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:52Z TRACE mavlink_msp_bridge::msp] time spent: total 19.711285ms encode 233.803µs, decode 19.477482ms
+[2019-11-18T10:12:52Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.20943952, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:53Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:53Z TRACE mavlink_msp_bridge::msp] time spent: total 20.627596ms encode 265.691µs, decode 20.361905ms
+[2019-11-18T10:12:53Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.20943952, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:53Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:53Z TRACE mavlink_msp_bridge::msp] time spent: total 20.27711ms encode 314.453µs, decode 19.962657ms
+[2019-11-18T10:12:53Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.20943952, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:53Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:53Z TRACE mavlink_msp_bridge::msp] time spent: total 15.805975ms encode 236.693µs, decode 15.569282ms
+[2019-11-18T10:12:53Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.20943952, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:53Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:12:53Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:12:53Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:53Z TRACE mavlink_msp_bridge::msp] time spent: total 15.720605ms encode 289.283µs, decode 15.431322ms
+[2019-11-18T10:12:53Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.20943952, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:53Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 44 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:12:53Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:53Z TRACE mavlink_msp_bridge::msp] time spent: total 15.178498ms encode 269.678µs, decode 14.90882ms
+[2019-11-18T10:12:53Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.20943952, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:54Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:54Z TRACE mavlink_msp_bridge::msp] time spent: total 14.974291ms encode 276.23µs, decode 14.698061ms
+[2019-11-18T10:12:54Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.20943952, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:54Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:54Z TRACE mavlink_msp_bridge::msp] time spent: total 14.658405ms encode 368.366µs, decode 14.290039ms
+[2019-11-18T10:12:54Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.20943952, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:54Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:54Z TRACE mavlink_msp_bridge::msp] time spent: total 15.018603ms encode 331.242µs, decode 14.687361ms
+[2019-11-18T10:12:54Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.20943952, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:54Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:12:54Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:12:54Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:54Z TRACE mavlink_msp_bridge::msp] time spent: total 19.882653ms encode 228.419µs, decode 19.654234ms
+[2019-11-18T10:12:54Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.20943952, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:54Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 45 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:12:54Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:54Z TRACE mavlink_msp_bridge::msp] time spent: total 20.277379ms encode 233.821µs, decode 20.043558ms
+[2019-11-18T10:12:54Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.20943952, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:55Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:55Z TRACE mavlink_msp_bridge::msp] time spent: total 20.356132ms encode 207.878µs, decode 20.148254ms
+[2019-11-18T10:12:55Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.20943952, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:55Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:55Z TRACE mavlink_msp_bridge::msp] time spent: total 20.390567ms encode 205.122µs, decode 20.185445ms
+[2019-11-18T10:12:55Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.78365284, yaw: 0.20943952, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:55Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:55Z TRACE mavlink_msp_bridge::msp] time spent: total 20.220916ms encode 325.213µs, decode 19.895703ms
+[2019-11-18T10:12:55Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.7853982, yaw: 0.20943952, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:55Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:12:55Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:12:55Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:55Z TRACE mavlink_msp_bridge::msp] time spent: total 20.473081ms encode 242.879µs, decode 20.230202ms
+[2019-11-18T10:12:55Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.7853982, yaw: 0.20943952, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:55Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 46 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:12:55Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:55Z TRACE mavlink_msp_bridge::msp] time spent: total 20.018258ms encode 251.002µs, decode 19.767256ms
+[2019-11-18T10:12:55Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0017453292, pitch: 0.7853982, yaw: 0.20943952, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:56Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:56Z TRACE mavlink_msp_bridge::msp] time spent: total 15.508157ms encode 294.303µs, decode 15.213854ms
+[2019-11-18T10:12:56Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.029670598, pitch: 0.7522369, yaw: 0.2268928, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:56Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:56Z TRACE mavlink_msp_bridge::msp] time spent: total 14.737546ms encode 295.192µs, decode 14.442354ms
+[2019-11-18T10:12:56Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.050614547, pitch: 0.7487463, yaw: 0.2268928, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:56Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:56Z TRACE mavlink_msp_bridge::msp] time spent: total 15.07945ms encode 251.955µs, decode 14.827495ms
+[2019-11-18T10:12:56Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.57595867, pitch: 0.77143556, yaw: 0.62831855, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:56Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:12:56Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:12:56Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:56Z TRACE mavlink_msp_bridge::msp] time spent: total 14.789501ms encode 241.846µs, decode 14.547655ms
+[2019-11-18T10:12:56Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.90582585, pitch: 0.48694685, yaw: 0.6632251, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:56Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 47 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:12:56Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:56Z TRACE mavlink_msp_bridge::msp] time spent: total 15.167142ms encode 245.255µs, decode 14.921887ms
+[2019-11-18T10:12:56Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.9023352, pitch: 0.143117, yaw: 0.40142572, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:57Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:57Z TRACE mavlink_msp_bridge::msp] time spent: total 15.022551ms encode 251.073µs, decode 14.771478ms
+[2019-11-18T10:12:57Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.9843657, pitch: -0.04363323, yaw: 0.33161256, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:57Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:57Z TRACE mavlink_msp_bridge::msp] time spent: total 14.96039ms encode 242.708µs, decode 14.717682ms
+[2019-11-18T10:12:57Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.84823, pitch: -0.12915437, yaw: 0.27925268, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:57Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:57Z TRACE mavlink_msp_bridge::msp] time spent: total 20.00033ms encode 249.568µs, decode 19.750762ms
+[2019-11-18T10:12:57Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.53407073, pitch: -0.65449846, yaw: 0.08726646, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:57Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:12:57Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:12:57Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:57Z TRACE mavlink_msp_bridge::msp] time spent: total 20.115632ms encode 222.329µs, decode 19.893303ms
+[2019-11-18T10:12:57Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.08726646, pitch: -0.65100783, yaw: 0.36651915, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:57Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 48 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:12:57Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:57Z TRACE mavlink_msp_bridge::msp] time spent: total 19.956875ms encode 230.344µs, decode 19.726531ms
+[2019-11-18T10:12:57Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.61784655, pitch: -0.36128315, yaw: 0.7853982, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:58Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:58Z TRACE mavlink_msp_bridge::msp] time spent: total 19.622263ms encode 231.327µs, decode 19.390936ms
+[2019-11-18T10:12:58Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.64751714, pitch: -0.21293017, yaw: 0.9075712, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:58Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:58Z TRACE mavlink_msp_bridge::msp] time spent: total 20.496174ms encode 207.065µs, decode 20.289109ms
+[2019-11-18T10:12:58Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.35430184, pitch: -0.2565634, yaw: 0.83775806, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:58Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:58Z TRACE mavlink_msp_bridge::msp] time spent: total 19.665122ms encode 227.742µs, decode 19.43738ms
+[2019-11-18T10:12:58Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.21118484, pitch: -0.1850049, yaw: 0.80285144, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:58Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:12:58Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:12:58Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:58Z TRACE mavlink_msp_bridge::msp] time spent: total 24.6406ms encode 210.84µs, decode 24.42976ms
+[2019-11-18T10:12:58Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.02617994, pitch: 0.15707964, yaw: 0.6981317, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:58Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 49 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:12:58Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:58Z TRACE mavlink_msp_bridge::msp] time spent: total 15.135027ms encode 228.369µs, decode 14.906658ms
+[2019-11-18T10:12:58Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.033161256, pitch: 0.2617994, yaw: 0.6457718, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:59Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:59Z TRACE mavlink_msp_bridge::msp] time spent: total 14.48952ms encode 241.42µs, decode 14.2481ms
+[2019-11-18T10:12:59Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.11170107, pitch: 0.20594884, yaw: 0.61086524, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:59Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:59Z TRACE mavlink_msp_bridge::msp] time spent: total 15.099878ms encode 238.55µs, decode 14.861328ms
+[2019-11-18T10:12:59Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.090757124, pitch: 0.23561946, yaw: 0.5235988, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:59Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:59Z TRACE mavlink_msp_bridge::msp] time spent: total 15.530702ms encode 242.962µs, decode 15.28774ms
+[2019-11-18T10:12:59Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.101229094, pitch: 0.14137167, yaw: 0.4712389, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:59Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:12:59Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:12:59Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:59Z TRACE mavlink_msp_bridge::msp] time spent: total 14.82208ms encode 247.85µs, decode 14.57423ms
+[2019-11-18T10:12:59Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.02443461, pitch: -0.26703537, yaw: 0.54105204, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:12:59Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 50 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:12:59Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:12:59Z TRACE mavlink_msp_bridge::msp] time spent: total 15.367379ms encode 227.626µs, decode 15.139753ms
+[2019-11-18T10:12:59Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.17104226, pitch: -0.54454273, yaw: 0.6981317, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:00Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:00Z TRACE mavlink_msp_bridge::msp] time spent: total 20.294724ms encode 229.233µs, decode 20.065491ms
+[2019-11-18T10:13:00Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.2932153, pitch: -0.51138145, yaw: 0.6806784, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:00Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:00Z TRACE mavlink_msp_bridge::msp] time spent: total 19.46743ms encode 215.011µs, decode 19.252419ms
+[2019-11-18T10:13:00Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.34382987, pitch: -0.17627825, yaw: 0.5235988, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:00Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:00Z TRACE mavlink_msp_bridge::msp] time spent: total 19.776054ms encode 255.857µs, decode 19.520197ms
+[2019-11-18T10:13:00Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.23212878, pitch: -0.034906585, yaw: 0.4712389, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:00Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:00Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:00Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:00Z TRACE mavlink_msp_bridge::msp] time spent: total 20.583573ms encode 220.569µs, decode 20.363004ms
+[2019-11-18T10:13:00Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.10297442, pitch: -0.108210415, yaw: 0.4537856, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:00Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 51 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:00Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:00Z TRACE mavlink_msp_bridge::msp] time spent: total 20.368753ms encode 230.119µs, decode 20.138634ms
+[2019-11-18T10:13:00Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.20943952, pitch: -0.18849556, yaw: 0.43633232, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:01Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:01Z TRACE mavlink_msp_bridge::msp] time spent: total 19.456868ms encode 298.385µs, decode 19.158483ms
+[2019-11-18T10:13:01Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.015707964, pitch: -0.1675516, yaw: 0.4712389, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:01Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:01Z TRACE mavlink_msp_bridge::msp] time spent: total 24.538786ms encode 269.556µs, decode 24.26923ms
+[2019-11-18T10:13:01Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04363323, pitch: -0.17976892, yaw: 0.4886922, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:01Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:01Z TRACE mavlink_msp_bridge::msp] time spent: total 15.147992ms encode 268.296µs, decode 14.879696ms
+[2019-11-18T10:13:01Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.37873644, pitch: -0.23911011, yaw: 0.5235988, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:01Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:01Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:01Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:01Z TRACE mavlink_msp_bridge::msp] time spent: total 14.292843ms encode 303.74µs, decode 13.989103ms
+[2019-11-18T10:13:01Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.31764993, pitch: -0.3996804, yaw: 0.5235988, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:01Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 52 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:01Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:01Z TRACE mavlink_msp_bridge::msp] time spent: total 14.806209ms encode 436.709µs, decode 14.3695ms
+[2019-11-18T10:13:01Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.20420352, pitch: -0.6614798, yaw: 0.54105204, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:02Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:02Z TRACE mavlink_msp_bridge::msp] time spent: total 14.333324ms encode 368.126µs, decode 13.965198ms
+[2019-11-18T10:13:02Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.21293017, pitch: -0.22514747, yaw: 0.55850536, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:02Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:02Z TRACE mavlink_msp_bridge::msp] time spent: total 14.753126ms encode 361.377µs, decode 14.391749ms
+[2019-11-18T10:13:02Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.22514747, pitch: -0.013962634, yaw: 0.5934119, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:02Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:02Z TRACE mavlink_msp_bridge::msp] time spent: total 15.237432ms encode 323.287µs, decode 14.914145ms
+[2019-11-18T10:13:02Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.10995574, pitch: 0.02617994, yaw: 0.61086524, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:02Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:02Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:02Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:02Z TRACE mavlink_msp_bridge::msp] time spent: total 19.938862ms encode 272.802µs, decode 19.66606ms
+[2019-11-18T10:13:02Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.34557518, pitch: -0.50963616, yaw: 0.62831855, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:02Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 53 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:02Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:02Z TRACE mavlink_msp_bridge::msp] time spent: total 20.083658ms encode 260.36µs, decode 19.823298ms
+[2019-11-18T10:13:02Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.28099802, pitch: -0.38048178, yaw: 0.5934119, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:03Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:03Z TRACE mavlink_msp_bridge::msp] time spent: total 20.273886ms encode 206.832µs, decode 20.067054ms
+[2019-11-18T10:13:03Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.18325958, pitch: -0.0715585, yaw: 0.55850536, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:03Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:03Z TRACE mavlink_msp_bridge::msp] time spent: total 19.446844ms encode 287.99µs, decode 19.158854ms
+[2019-11-18T10:13:03Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.18325958, pitch: -0.32637656, yaw: 0.5061455, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:03Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:03Z TRACE mavlink_msp_bridge::msp] time spent: total 20.33919ms encode 221.576µs, decode 20.117614ms
+[2019-11-18T10:13:03Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.055850536, pitch: -0.45029494, yaw: 0.5235988, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:03Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:03Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:03Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:03Z TRACE mavlink_msp_bridge::msp] time spent: total 19.515459ms encode 291.665µs, decode 19.223794ms
+[2019-11-18T10:13:03Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.12915437, pitch: -0.19373155, yaw: 0.4537856, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:03Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 54 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:03Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:03Z TRACE mavlink_msp_bridge::msp] time spent: total 24.956046ms encode 239.824µs, decode 24.716222ms
+[2019-11-18T10:13:03Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.17104226, pitch: -0.09250245, yaw: 0.41887903, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:04Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:04Z TRACE mavlink_msp_bridge::msp] time spent: total 15.143278ms encode 233.414µs, decode 14.909864ms
+[2019-11-18T10:13:04Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.16231562, pitch: -0.12566371, yaw: 0.40142572, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:04Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:04Z TRACE mavlink_msp_bridge::msp] time spent: total 14.477546ms encode 272.303µs, decode 14.205243ms
+[2019-11-18T10:13:04Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.17802358, pitch: -0.082030475, yaw: 0.33161256, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:04Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:04Z TRACE mavlink_msp_bridge::msp] time spent: total 14.22672ms encode 219.137µs, decode 14.007583ms
+[2019-11-18T10:13:04Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.06981317, pitch: -0.27052602, yaw: 0.6981317, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:04Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:04Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:04Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:04Z TRACE mavlink_msp_bridge::msp] time spent: total 15.11225ms encode 214.898µs, decode 14.897352ms
+[2019-11-18T10:13:04Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.017453292, pitch: -0.50963616, yaw: 0.5061455, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:04Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 55 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:04Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:04Z TRACE mavlink_msp_bridge::msp] time spent: total 14.941949ms encode 248.669µs, decode 14.69328ms
+[2019-11-18T10:13:04Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.022689281, pitch: -0.56548667, yaw: 0.5235988, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:05Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:05Z TRACE mavlink_msp_bridge::msp] time spent: total 19.596328ms encode 224.697µs, decode 19.371631ms
+[2019-11-18T10:13:05Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.12042772, pitch: -0.41538838, yaw: 0.5061455, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:05Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:05Z TRACE mavlink_msp_bridge::msp] time spent: total 19.618487ms encode 254.121µs, decode 19.364366ms
+[2019-11-18T10:13:05Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.1675516, pitch: -0.022689281, yaw: 0.5235988, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:05Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:05Z TRACE mavlink_msp_bridge::msp] time spent: total 19.225785ms encode 216.75µs, decode 19.009035ms
+[2019-11-18T10:13:05Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.18849556, pitch: -0.12217305, yaw: 0.5235988, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:05Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:05Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:05Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:05Z TRACE mavlink_msp_bridge::msp] time spent: total 19.466918ms encode 337.936µs, decode 19.128982ms
+[2019-11-18T10:13:05Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.13788101, pitch: -0.19198622, yaw: 0.4537856, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:05Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 56 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:05Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:05Z TRACE mavlink_msp_bridge::msp] time spent: total 19.266873ms encode 227.952µs, decode 19.038921ms
+[2019-11-18T10:13:05Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.06806784, pitch: -0.6492625, yaw: 0.4886922, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:06Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:06Z TRACE mavlink_msp_bridge::msp] time spent: total 19.740889ms encode 236.179µs, decode 19.50471ms
+[2019-11-18T10:13:06Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.15533431, pitch: -0.57770395, yaw: 0.5235988, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:06Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:06Z TRACE mavlink_msp_bridge::msp] time spent: total 19.332475ms encode 207.803µs, decode 19.124672ms
+[2019-11-18T10:13:06Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.21816616, pitch: -0.064577185, yaw: 0.6457718, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:06Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:06Z TRACE mavlink_msp_bridge::msp] time spent: total 24.485907ms encode 241.731µs, decode 24.244176ms
+[2019-11-18T10:13:06Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.13613568, pitch: 0.19024089, yaw: 0.5235988, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:06Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:06Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:06Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:06Z TRACE mavlink_msp_bridge::msp] time spent: total 15.040369ms encode 271.686µs, decode 14.768683ms
+[2019-11-18T10:13:06Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.21642083, pitch: 0.027925268, yaw: 0.33161256, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:06Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 57 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:06Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:06Z TRACE mavlink_msp_bridge::msp] time spent: total 14.248145ms encode 230.62µs, decode 14.017525ms
+[2019-11-18T10:13:06Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.26703537, pitch: -0.059341196, yaw: 0.43633232, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:07Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:07Z TRACE mavlink_msp_bridge::msp] time spent: total 14.227822ms encode 255.284µs, decode 13.972538ms
+[2019-11-18T10:13:07Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.30194196, yaw: 0.55850536, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:07Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:07Z TRACE mavlink_msp_bridge::msp] time spent: total 14.312084ms encode 233.985µs, decode 14.078099ms
+[2019-11-18T10:13:07Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.013962634, pitch: -0.3996804, yaw: 0.7330383, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:07Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:07Z TRACE mavlink_msp_bridge::msp] time spent: total 14.17034ms encode 229.95µs, decode 13.94039ms
+[2019-11-18T10:13:07Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.045378562, pitch: -0.64751714, yaw: 0.6457718, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:07Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:07Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:07Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:07Z TRACE mavlink_msp_bridge::msp] time spent: total 20.039136ms encode 230.853µs, decode 19.808283ms
+[2019-11-18T10:13:07Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.0715585, pitch: -0.6981317, yaw: 0.82030475, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:07Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 58 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:07Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:07Z TRACE mavlink_msp_bridge::msp] time spent: total 19.245704ms encode 228.912µs, decode 19.016792ms
+[2019-11-18T10:13:07Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.099483766, pitch: -0.58119464, yaw: 0.7853982, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:08Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:08Z TRACE mavlink_msp_bridge::msp] time spent: total 19.961086ms encode 236.006µs, decode 19.72508ms
+[2019-11-18T10:13:08Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.11170107, pitch: -0.4607669, yaw: 0.5061455, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:08Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:08Z TRACE mavlink_msp_bridge::msp] time spent: total 19.820502ms encode 210.194µs, decode 19.610308ms
+[2019-11-18T10:13:08Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.24958208, pitch: -0.33859387, yaw: 0.34906584, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:08Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:08Z TRACE mavlink_msp_bridge::msp] time spent: total 19.534493ms encode 217.396µs, decode 19.317097ms
+[2019-11-18T10:13:08Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.34732053, pitch: -0.019198623, yaw: 0.0, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:08Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:08Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:08Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:08Z TRACE mavlink_msp_bridge::msp] time spent: total 19.308412ms encode 218.349µs, decode 19.090063ms
+[2019-11-18T10:13:08Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.18325958, pitch: 0.04886922, yaw: 6.0562925, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:08Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 59 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:08Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:08Z TRACE mavlink_msp_bridge::msp] time spent: total 19.773508ms encode 222.074µs, decode 19.551434ms
+[2019-11-18T10:13:08Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.12042772, pitch: -0.07679449, yaw: 6.091199, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:09Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:09Z TRACE mavlink_msp_bridge::msp] time spent: total 14.981461ms encode 231.513µs, decode 14.749948ms
+[2019-11-18T10:13:09Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.15009831, pitch: -0.726057, yaw: 6.2482786, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:09Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:09Z TRACE mavlink_msp_bridge::msp] time spent: total 14.394869ms encode 234.552µs, decode 14.160317ms
+[2019-11-18T10:13:09Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.87266463, pitch: -1.4241886, yaw: 0.80285144, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:09Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:09Z TRACE mavlink_msp_bridge::msp] time spent: total 14.680086ms encode 241.419µs, decode 14.438667ms
+[2019-11-18T10:13:09Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.06981317, pitch: -0.099483766, yaw: 6.1784654, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:09Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:09Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:09Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:09Z TRACE mavlink_msp_bridge::msp] time spent: total 14.823347ms encode 228.979µs, decode 14.594368ms
+[2019-11-18T10:13:09Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.12740904, pitch: 0.25481808, yaw: 6.161012, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:09Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 60 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:09Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:09Z TRACE mavlink_msp_bridge::msp] time spent: total 14.778607ms encode 301.622µs, decode 14.476985ms
+[2019-11-18T10:13:09Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.08901179, pitch: 0.14486232, yaw: 6.161012, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:10Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:10Z TRACE mavlink_msp_bridge::msp] time spent: total 14.815284ms encode 230.181µs, decode 14.585103ms
+[2019-11-18T10:13:10Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.19198622, pitch: -1.0367255, yaw: 0.06981317, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:10Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:10Z TRACE mavlink_msp_bridge::msp] time spent: total 19.258867ms encode 225.304µs, decode 19.033563ms
+[2019-11-18T10:13:10Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -2.8082347, pitch: -1.394518, yaw: 2.740167, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:10Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:10Z TRACE mavlink_msp_bridge::msp] time spent: total 19.086922ms encode 238.932µs, decode 18.84799ms
+[2019-11-18T10:13:10Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.4660029, yaw: 6.1784654, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:10Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:10Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:10Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:10Z TRACE mavlink_msp_bridge::msp] time spent: total 18.960012ms encode 248.961µs, decode 18.711051ms
+[2019-11-18T10:13:10Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.15009831, pitch: 0.28448868, yaw: 6.2482786, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:10Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 61 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:10Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:10Z TRACE mavlink_msp_bridge::msp] time spent: total 19.604753ms encode 242.888µs, decode 19.361865ms
+[2019-11-18T10:13:10Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.11868239, pitch: 0.22165681, yaw: 0.017453292, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:11Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:11Z TRACE mavlink_msp_bridge::msp] time spent: total 19.342174ms encode 355.276µs, decode 18.986898ms
+[2019-11-18T10:13:11Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.059341196, pitch: -0.075049154, yaw: 0.13962634, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:11Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:11Z TRACE mavlink_msp_bridge::msp] time spent: total 19.21201ms encode 280.087µs, decode 18.931923ms
+[2019-11-18T10:13:11Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.057595864, pitch: -0.5602507, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:11Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:11Z TRACE mavlink_msp_bridge::msp] time spent: total 24.374936ms encode 248.851µs, decode 24.126085ms
+[2019-11-18T10:13:11Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.06981317, pitch: -0.4904375, yaw: 0.38397244, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:11Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:11Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:11Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:11Z TRACE mavlink_msp_bridge::msp] time spent: total 24.556667ms encode 240.51µs, decode 24.316157ms
+[2019-11-18T10:13:11Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.27227136, pitch: 0.12217305, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:11Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 62 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:11Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:11Z TRACE mavlink_msp_bridge::msp] time spent: total 14.515127ms encode 261.596µs, decode 14.253531ms
+[2019-11-18T10:13:11Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.20943952, pitch: -0.075049154, yaw: 0.08726646, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:12Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:12Z TRACE mavlink_msp_bridge::msp] time spent: total 14.558495ms encode 266.338µs, decode 14.292157ms
+[2019-11-18T10:13:12Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.108210415, pitch: -0.10646509, yaw: 0.13962634, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:12Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:12Z TRACE mavlink_msp_bridge::msp] time spent: total 14.873083ms encode 237.096µs, decode 14.635987ms
+[2019-11-18T10:13:12Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.1308997, pitch: -0.1134464, yaw: 0.034906585, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:12Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:12Z TRACE mavlink_msp_bridge::msp] time spent: total 14.800409ms encode 220.207µs, decode 14.580202ms
+[2019-11-18T10:13:12Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.10646509, pitch: -0.21118484, yaw: 6.265732, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:12Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:12Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:12Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:12Z TRACE mavlink_msp_bridge::msp] time spent: total 14.262157ms encode 225.128µs, decode 14.037029ms
+[2019-11-18T10:13:12Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.1308997, pitch: -0.20245819, yaw: 6.265732, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:12Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 63 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:12Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:12Z TRACE mavlink_msp_bridge::msp] time spent: total 18.858784ms encode 205.798µs, decode 18.652986ms
+[2019-11-18T10:13:12Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.054105207, pitch: -0.21816616, yaw: 0.13962634, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:13Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:13Z TRACE mavlink_msp_bridge::msp] time spent: total 19.473049ms encode 235.474µs, decode 19.237575ms
+[2019-11-18T10:13:13Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.057595864, pitch: -0.10471976, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:13Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:13Z TRACE mavlink_msp_bridge::msp] time spent: total 19.829048ms encode 226.791µs, decode 19.602257ms
+[2019-11-18T10:13:13Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.055850536, pitch: -0.12566371, yaw: 0.36651915, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:13Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:13Z TRACE mavlink_msp_bridge::msp] time spent: total 19.510352ms encode 212.504µs, decode 19.297848ms
+[2019-11-18T10:13:13Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.008726646, pitch: -0.15707964, yaw: 0.4537856, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:13Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:13Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:13Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:13Z TRACE mavlink_msp_bridge::msp] time spent: total 19.834353ms encode 235.066µs, decode 19.599287ms
+[2019-11-18T10:13:13Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.008726646, pitch: -0.15707964, yaw: 0.4537856, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:13Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 64 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:13Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:13Z TRACE mavlink_msp_bridge::msp] time spent: total 19.730639ms encode 229.354µs, decode 19.501285ms
+[2019-11-18T10:13:13Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.010471975, pitch: -0.15707964, yaw: 0.4537856, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:14Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:14Z TRACE mavlink_msp_bridge::msp] time spent: total 24.714816ms encode 209.204µs, decode 24.505612ms
+[2019-11-18T10:13:14Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.008726646, pitch: -0.13613568, yaw: 0.5061455, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:14Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:14Z TRACE mavlink_msp_bridge::msp] time spent: total 24.180746ms encode 220.87µs, decode 23.959876ms
+[2019-11-18T10:13:14Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.010471975, pitch: -0.10646509, yaw: 0.54105204, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:14Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:14Z TRACE mavlink_msp_bridge::msp] time spent: total 14.256428ms encode 242.666µs, decode 14.013762ms
+[2019-11-18T10:13:14Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.019198623, pitch: -0.10646509, yaw: 0.55850536, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:14Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:14Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:14Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:14Z TRACE mavlink_msp_bridge::msp] time spent: total 14.09221ms encode 228.234µs, decode 13.863976ms
+[2019-11-18T10:13:14Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.03141593, pitch: -0.26703537, yaw: 0.5061455, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:14Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 65 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:14Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:14Z TRACE mavlink_msp_bridge::msp] time spent: total 14.61983ms encode 217.333µs, decode 14.402497ms
+[2019-11-18T10:13:14Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: -0.050614547, pitch: -0.27401668, yaw: 0.34906584, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:15Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:15Z TRACE mavlink_msp_bridge::msp] time spent: total 14.77916ms encode 222.133µs, decode 14.557027ms
+[2019-11-18T10:13:15Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.061086524, pitch: -0.18675023, yaw: 0.29670596, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:15Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:15Z TRACE mavlink_msp_bridge::msp] time spent: total 14.709366ms encode 219.128µs, decode 14.490238ms
+[2019-11-18T10:13:15Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.045378562, pitch: -0.17976892, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:15Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:15Z TRACE mavlink_msp_bridge::msp] time spent: total 18.823347ms encode 216.169µs, decode 18.607178ms
+[2019-11-18T10:13:15Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.045378562, pitch: -0.17802358, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:15Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:15Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:15Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:15Z TRACE mavlink_msp_bridge::msp] time spent: total 19.58331ms encode 220.126µs, decode 19.363184ms
+[2019-11-18T10:13:15Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.045378562, pitch: -0.17802358, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:15Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 66 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:15Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:15Z TRACE mavlink_msp_bridge::msp] time spent: total 18.958947ms encode 213.357µs, decode 18.74559ms
+[2019-11-18T10:13:15Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.045378562, pitch: -0.17802358, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:16Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:16Z TRACE mavlink_msp_bridge::msp] time spent: total 19.563471ms encode 210.353µs, decode 19.353118ms
+[2019-11-18T10:13:16Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.045378562, pitch: -0.17802358, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:16Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:16Z TRACE mavlink_msp_bridge::msp] time spent: total 18.869669ms encode 212.93µs, decode 18.656739ms
+[2019-11-18T10:13:16Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.045378562, pitch: -0.17976892, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:16Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:16Z TRACE mavlink_msp_bridge::msp] time spent: total 19.566974ms encode 214.239µs, decode 19.352735ms
+[2019-11-18T10:13:16Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.045378562, pitch: -0.17976892, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:16Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:16Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:16Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:16Z TRACE mavlink_msp_bridge::msp] time spent: total 23.67865ms encode 217.846µs, decode 23.460804ms
+[2019-11-18T10:13:16Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.045378562, pitch: -0.17976892, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:16Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 67 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:16Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:16Z TRACE mavlink_msp_bridge::msp] time spent: total 23.657796ms encode 228.439µs, decode 23.429357ms
+[2019-11-18T10:13:16Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.045378562, pitch: -0.17976892, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:17Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:17Z TRACE mavlink_msp_bridge::msp] time spent: total 14.302865ms encode 226.339µs, decode 14.076526ms
+[2019-11-18T10:13:17Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.045378562, pitch: -0.17976892, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:17Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:17Z TRACE mavlink_msp_bridge::msp] time spent: total 13.821652ms encode 212.716µs, decode 13.608936ms
+[2019-11-18T10:13:17Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.045378562, pitch: -0.17976892, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:17Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:17Z TRACE mavlink_msp_bridge::msp] time spent: total 14.288944ms encode 231.688µs, decode 14.057256ms
+[2019-11-18T10:13:17Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.045378562, pitch: -0.17976892, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:17Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:17Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:17Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:17Z TRACE mavlink_msp_bridge::msp] time spent: total 14.606156ms encode 214.218µs, decode 14.391938ms
+[2019-11-18T10:13:17Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.045378562, pitch: -0.17976892, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:17Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 68 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:17Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:17Z TRACE mavlink_msp_bridge::msp] time spent: total 14.573569ms encode 220.034µs, decode 14.353535ms
+[2019-11-18T10:13:17Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.17976892, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:18Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:18Z TRACE mavlink_msp_bridge::msp] time spent: total 19.319747ms encode 220.896µs, decode 19.098851ms
+[2019-11-18T10:13:18Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.17976892, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:18Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:18Z TRACE mavlink_msp_bridge::msp] time spent: total 19.456829ms encode 221.093µs, decode 19.235736ms
+[2019-11-18T10:13:18Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.17976892, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:18Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:18Z TRACE mavlink_msp_bridge::msp] time spent: total 18.768618ms encode 220.671µs, decode 18.547947ms
+[2019-11-18T10:13:18Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.17976892, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:18Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:18Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:18Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:18Z TRACE mavlink_msp_bridge::msp] time spent: total 19.463465ms encode 219.421µs, decode 19.244044ms
+[2019-11-18T10:13:18Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.17976892, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:18Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 69 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:18Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:18Z TRACE mavlink_msp_bridge::msp] time spent: total 19.174703ms encode 226.096µs, decode 18.948607ms
+[2019-11-18T10:13:18Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.17976892, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:19Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:19Z TRACE mavlink_msp_bridge::msp] time spent: total 19.213775ms encode 226.901µs, decode 18.986874ms
+[2019-11-18T10:13:19Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.17976892, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:19Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:19Z TRACE mavlink_msp_bridge::msp] time spent: total 24.432549ms encode 209.358µs, decode 24.223191ms
+[2019-11-18T10:13:19Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.17976892, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:19Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:19Z TRACE mavlink_msp_bridge::msp] time spent: total 23.789572ms encode 210.64µs, decode 23.578932ms
+[2019-11-18T10:13:19Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.17976892, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:19Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:19Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:19Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:19Z TRACE mavlink_msp_bridge::msp] time spent: total 14.627719ms encode 220.136µs, decode 14.407583ms
+[2019-11-18T10:13:19Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.17976892, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:19Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 70 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:19Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:19Z TRACE mavlink_msp_bridge::msp] time spent: total 14.657855ms encode 220.697µs, decode 14.437158ms
+[2019-11-18T10:13:19Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.17976892, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:20Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:20Z TRACE mavlink_msp_bridge::msp] time spent: total 14.110628ms encode 225.32µs, decode 13.885308ms
+[2019-11-18T10:13:20Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:20Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:20Z TRACE mavlink_msp_bridge::msp] time spent: total 13.591613ms encode 233.396µs, decode 13.358217ms
+[2019-11-18T10:13:20Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:20Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:20Z TRACE mavlink_msp_bridge::msp] time spent: total 18.782083ms encode 238.656µs, decode 18.543427ms
+[2019-11-18T10:13:20Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:20Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:20Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:20Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:20Z TRACE mavlink_msp_bridge::msp] time spent: total 18.723811ms encode 234.524µs, decode 18.489287ms
+[2019-11-18T10:13:20Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:20Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 71 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:20Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:20Z TRACE mavlink_msp_bridge::msp] time spent: total 19.22989ms encode 233.12µs, decode 18.99677ms
+[2019-11-18T10:13:20Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:21Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:21Z TRACE mavlink_msp_bridge::msp] time spent: total 19.440875ms encode 233.436µs, decode 19.207439ms
+[2019-11-18T10:13:21Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:21Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:21Z TRACE mavlink_msp_bridge::msp] time spent: total 19.553497ms encode 233.141µs, decode 19.320356ms
+[2019-11-18T10:13:21Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:21Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:21Z TRACE mavlink_msp_bridge::msp] time spent: total 18.778759ms encode 238.093µs, decode 18.540666ms
+[2019-11-18T10:13:21Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:21Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:21Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:21Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:21Z TRACE mavlink_msp_bridge::msp] time spent: total 18.672114ms encode 227.302µs, decode 18.444812ms
+[2019-11-18T10:13:21Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:21Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 72 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:21Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:21Z TRACE mavlink_msp_bridge::msp] time spent: total 24.081778ms encode 218.723µs, decode 23.863055ms
+[2019-11-18T10:13:21Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:22Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:22Z TRACE mavlink_msp_bridge::msp] time spent: total 23.644102ms encode 220.597µs, decode 23.423505ms
+[2019-11-18T10:13:22Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:22Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:22Z TRACE mavlink_msp_bridge::msp] time spent: total 13.650988ms encode 208.949µs, decode 13.442039ms
+[2019-11-18T10:13:22Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:22Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:22Z TRACE mavlink_msp_bridge::msp] time spent: total 13.804114ms encode 226.973µs, decode 13.577141ms
+[2019-11-18T10:13:22Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:22Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:22Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:22Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:22Z TRACE mavlink_msp_bridge::msp] time spent: total 14.121537ms encode 246.772µs, decode 13.874765ms
+[2019-11-18T10:13:22Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04712389, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:22Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 73 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:22Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:22Z TRACE mavlink_msp_bridge::msp] time spent: total 13.718195ms encode 266.701µs, decode 13.451494ms
+[2019-11-18T10:13:22Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:23Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:23Z TRACE mavlink_msp_bridge::msp] time spent: total 19.206516ms encode 228.335µs, decode 18.978181ms
+[2019-11-18T10:13:23Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:23Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:23Z TRACE mavlink_msp_bridge::msp] time spent: total 18.652788ms encode 239.523µs, decode 18.413265ms
+[2019-11-18T10:13:23Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:23Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:23Z TRACE mavlink_msp_bridge::msp] time spent: total 18.72447ms encode 237.49µs, decode 18.48698ms
+[2019-11-18T10:13:23Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:23Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:23Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:23Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:23Z TRACE mavlink_msp_bridge::msp] time spent: total 18.485403ms encode 225.988µs, decode 18.259415ms
+[2019-11-18T10:13:23Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:23Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 74 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:23Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:23Z TRACE mavlink_msp_bridge::msp] time spent: total 18.695632ms encode 235.593µs, decode 18.460039ms
+[2019-11-18T10:13:23Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:24Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:24Z TRACE mavlink_msp_bridge::msp] time spent: total 18.444755ms encode 221.34µs, decode 18.223415ms
+[2019-11-18T10:13:24Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:24Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:24Z TRACE mavlink_msp_bridge::msp] time spent: total 19.261473ms encode 209.458µs, decode 19.052015ms
+[2019-11-18T10:13:24Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:24Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:24Z TRACE mavlink_msp_bridge::msp] time spent: total 23.394989ms encode 221.678µs, decode 23.173311ms
+[2019-11-18T10:13:24Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:24Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:24Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:24Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:24Z TRACE mavlink_msp_bridge::msp] time spent: total 23.580374ms encode 223.896µs, decode 23.356478ms
+[2019-11-18T10:13:24Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:24Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 75 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:24Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:24Z TRACE mavlink_msp_bridge::msp] time spent: total 13.939634ms encode 214.129µs, decode 13.725505ms
+[2019-11-18T10:13:24Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:25Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:25Z TRACE mavlink_msp_bridge::msp] time spent: total 13.929185ms encode 218.289µs, decode 13.710896ms
+[2019-11-18T10:13:25Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:25Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:25Z TRACE mavlink_msp_bridge::msp] time spent: total 13.954891ms encode 211.611µs, decode 13.74328ms
+[2019-11-18T10:13:25Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:25Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:25Z TRACE mavlink_msp_bridge::msp] time spent: total 13.408652ms encode 223.289µs, decode 13.185363ms
+[2019-11-18T10:13:25Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:25Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:25Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:25Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:25Z TRACE mavlink_msp_bridge::msp] time spent: total 18.859947ms encode 251.237µs, decode 18.60871ms
+[2019-11-18T10:13:25Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:25Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 76 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:25Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:25Z TRACE mavlink_msp_bridge::msp] time spent: total 18.281112ms encode 350.201µs, decode 17.930911ms
+[2019-11-18T10:13:25Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:26Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:26Z TRACE mavlink_msp_bridge::msp] time spent: total 18.375141ms encode 236.744µs, decode 18.138397ms
+[2019-11-18T10:13:26Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:26Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:26Z TRACE mavlink_msp_bridge::msp] time spent: total 18.914632ms encode 297.891µs, decode 18.616741ms
+[2019-11-18T10:13:26Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:26Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:26Z TRACE mavlink_msp_bridge::msp] time spent: total 18.660431ms encode 244.325µs, decode 18.416106ms
+[2019-11-18T10:13:26Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:26Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:26Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:26Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:26Z TRACE mavlink_msp_bridge::msp] time spent: total 18.708433ms encode 254.895µs, decode 18.453538ms
+[2019-11-18T10:13:26Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:26Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 77 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:26Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:26Z TRACE mavlink_msp_bridge::msp] time spent: total 18.965288ms encode 226.655µs, decode 18.738633ms
+[2019-11-18T10:13:26Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:27Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:27Z TRACE mavlink_msp_bridge::msp] time spent: total 23.610446ms encode 224.869µs, decode 23.385577ms
+[2019-11-18T10:13:27Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:27Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:27Z TRACE mavlink_msp_bridge::msp] time spent: total 23.564373ms encode 245.733µs, decode 23.31864ms
+[2019-11-18T10:13:27Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:27Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:27Z TRACE mavlink_msp_bridge::msp] time spent: total 23.407729ms encode 371.49µs, decode 23.036239ms
+[2019-11-18T10:13:27Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:27Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:27Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:27Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:27Z TRACE mavlink_msp_bridge::msp] time spent: total 13.605049ms encode 226.708µs, decode 13.378341ms
+[2019-11-18T10:13:27Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:27Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 78 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:27Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:27Z TRACE mavlink_msp_bridge::msp] time spent: total 13.982258ms encode 239.495µs, decode 13.742763ms
+[2019-11-18T10:13:27Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:28Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:28Z TRACE mavlink_msp_bridge::msp] time spent: total 13.714022ms encode 269.64µs, decode 13.444382ms
+[2019-11-18T10:13:28Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:28Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:28Z TRACE mavlink_msp_bridge::msp] time spent: total 18.670665ms encode 277.886µs, decode 18.392779ms
+[2019-11-18T10:13:28Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:28Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:28Z TRACE mavlink_msp_bridge::msp] time spent: total 19.191165ms encode 241.928µs, decode 18.949237ms
+[2019-11-18T10:13:28Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:28Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:28Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:28Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:28Z TRACE mavlink_msp_bridge::msp] time spent: total 18.140306ms encode 238.238µs, decode 17.902068ms
+[2019-11-18T10:13:28Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:28Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 79 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:28Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:28Z TRACE mavlink_msp_bridge::msp] time spent: total 18.513316ms encode 244.363µs, decode 18.268953ms
+[2019-11-18T10:13:28Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:29Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:29Z TRACE mavlink_msp_bridge::msp] time spent: total 19.086126ms encode 222.658µs, decode 18.863468ms
+[2019-11-18T10:13:29Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:29Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:29Z TRACE mavlink_msp_bridge::msp] time spent: total 18.678663ms encode 225.512µs, decode 18.453151ms
+[2019-11-18T10:13:29Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:29Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:29Z TRACE mavlink_msp_bridge::msp] time spent: total 18.038653ms encode 232.029µs, decode 17.806624ms
+[2019-11-18T10:13:29Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:29Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:29Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:29Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:29Z TRACE mavlink_msp_bridge::msp] time spent: total 24.193483ms encode 292.414µs, decode 23.901069ms
+[2019-11-18T10:13:29Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:29Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 80 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:29Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:29Z TRACE mavlink_msp_bridge::msp] time spent: total 23.880985ms encode 252.558µs, decode 23.628427ms
+[2019-11-18T10:13:29Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:30Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:30Z TRACE mavlink_msp_bridge::msp] time spent: total 13.306657ms encode 243.621µs, decode 13.063036ms
+[2019-11-18T10:13:30Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:30Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:30Z TRACE mavlink_msp_bridge::msp] time spent: total 13.240184ms encode 329.375µs, decode 12.910809ms
+[2019-11-18T10:13:30Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:30Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:30Z TRACE mavlink_msp_bridge::msp] time spent: total 13.173798ms encode 249.442µs, decode 12.924356ms
+[2019-11-18T10:13:30Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.050614547, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:30Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:30Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:30Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:30Z TRACE mavlink_msp_bridge::msp] time spent: total 13.115908ms encode 258.406µs, decode 12.857502ms
+[2019-11-18T10:13:30Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.050614547, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:30Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 81 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:30Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:30Z TRACE mavlink_msp_bridge::msp] time spent: total 17.973219ms encode 241.374µs, decode 17.731845ms
+[2019-11-18T10:13:30Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.04886922, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:31Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:31Z TRACE mavlink_msp_bridge::msp] time spent: total 18.005672ms encode 251.832µs, decode 17.75384ms
+[2019-11-18T10:13:31Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.050614547, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:31Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:31Z TRACE mavlink_msp_bridge::msp] time spent: total 18.006973ms encode 331.618µs, decode 17.675355ms
+[2019-11-18T10:13:31Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.050614547, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:31Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:31Z TRACE mavlink_msp_bridge::msp] time spent: total 18.25149ms encode 254.451µs, decode 17.997039ms
+[2019-11-18T10:13:31Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.050614547, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:31Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:31Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:31Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:31Z TRACE mavlink_msp_bridge::msp] time spent: total 18.939178ms encode 373.621µs, decode 18.565557ms
+[2019-11-18T10:13:31Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.050614547, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:31Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 82 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:31Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:31Z TRACE mavlink_msp_bridge::msp] time spent: total 18.952837ms encode 262.351µs, decode 18.690486ms
+[2019-11-18T10:13:31Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.050614547, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:32Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:32Z TRACE mavlink_msp_bridge::msp] time spent: total 23.493041ms encode 378.375µs, decode 23.114666ms
+[2019-11-18T10:13:32Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.050614547, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:32Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:32Z TRACE mavlink_msp_bridge::msp] time spent: total 23.443301ms encode 258.572µs, decode 23.184729ms
+[2019-11-18T10:13:32Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.050614547, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:32Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:32Z TRACE mavlink_msp_bridge::msp] time spent: total 28.242944ms encode 294.919µs, decode 27.948025ms
+[2019-11-18T10:13:32Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.050614547, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:32Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:32Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:32Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:32Z TRACE mavlink_msp_bridge::msp] time spent: total 13.595213ms encode 272.641µs, decode 13.322572ms
+[2019-11-18T10:13:32Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.050614547, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:32Z DEBUG mavlink_msp_bridge::mavlink] received: Ok((MavHeader { system_id: 255, component_id: 0, sequence: 83 }, HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GCS, autopilot: MAV_AUTOPILOT_INVALID, base_mode: MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, system_status: MAV_STATE_ACTIVE, mavlink_version: 3 })))
+[2019-11-18T10:13:32Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:32Z TRACE mavlink_msp_bridge::msp] time spent: total 13.109018ms encode 401.498µs, decode 12.70752ms
+[2019-11-18T10:13:32Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.050614547, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:33Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:33Z TRACE mavlink_msp_bridge::msp] time spent: total 13.536781ms encode 241.725µs, decode 13.295056ms
+[2019-11-18T10:13:33Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.050614547, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:33Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:33Z TRACE mavlink_msp_bridge::msp] time spent: total 13.439843ms encode 242.873µs, decode 13.19697ms
+[2019-11-18T10:13:33Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.050614547, pitch: -0.18151425, yaw: 0.31415927, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:33Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:33Z TRACE mavlink_msp_bridge::msp] time spent: total 18.597338ms encode 269.326µs, decode 18.328012ms
+[2019-11-18T10:13:33Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.050614547, pitch: -0.18151425, yaw: 0.33161256, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })
+[2019-11-18T10:13:33Z TRACE mavlink_msp_bridge::core] processing task 0
+[2019-11-18T10:13:33Z DEBUG mavlink_msp_bridge::mavlink] sending: HEARTBEAT(HEARTBEAT_DATA { custom_mode: 0, mavtype: MAV_TYPE_GENERIC, autopilot: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY, base_mode: (empty), system_status: MAV_STATE_STANDBY, mavlink_version: 3 })
+[2019-11-18T10:13:33Z TRACE mavlink_msp_bridge::core] processing task 30
+[2019-11-18T10:13:33Z TRACE mavlink_msp_bridge::msp] time spent: total 18.095898ms encode 240.286µs, decode 17.855612ms
+[2019-11-18T10:13:33Z DEBUG mavlink_msp_bridge::mavlink] sending: ATTITUDE(ATTITUDE_DATA { time_boot_ms: 0, roll: 0.050614547, pitch: -0.18151425, yaw: 0.33161256, rollspeed: 0.0, pitchspeed: 0.0, yawspeed: 0.0 })

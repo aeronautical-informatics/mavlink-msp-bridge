@@ -250,9 +250,9 @@ pub struct MspMessage<P: MspPayload> {
     pub payload: Option<P>,
 }
 
-impl<P: MspPayload> Display for MspMessage<P>
+impl<P> Display for MspMessage<P>
 where
-    P: Clone + Debug,
+    P: MspPayload + Clone + Debug,
 {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         write!(
@@ -266,9 +266,9 @@ where
     }
 }
 
-impl<P: MspPayload> MspMessage<P>
+impl<P> MspMessage<P>
 where
-    P: Clone + Debug,
+    P: MspPayload + Clone + Debug,
 {
     /// serializes message omiting the checksum
     fn ser(&self) -> io::Result<Vec<u8>> {
@@ -323,7 +323,7 @@ where
     }
 
     /// decodes a message from something which can be read from
-    pub fn decode<R: Read>(mut r: &mut R) -> io::Result<Self> {
+    pub fn decode<R: Read>(r: &mut R) -> io::Result<Self> {
         #[derive(Debug)]
         enum State {
             Header,
@@ -376,7 +376,7 @@ where
                     state = Some(State::Payload(payload_size));
                 }
                 Some(State::Payload(payload_size)) if payload_size > 0 => {
-                    message.payload = Some(P::decode(&mut r)?);
+                    message.payload = Some(P::decode(r)?);
                     state = Some(State::Checksum);
                 }
                 Some(State::Payload(_)) => state = Some(State::Checksum),
@@ -399,7 +399,7 @@ where
     }
 
     /// tries to fetch a payload from a ressource that both allows us to read and write from/to it
-    pub fn fetch<T: Read + Write>(mut conn: &mut T) -> io::Result<P> {
+    pub fn fetch<T: Read + Write>(conn: &mut T) -> io::Result<P> {
         let msg: Self = MspMessage {
             version: MspVersion::V2,
             direction: MspDirection::Request,
@@ -407,7 +407,7 @@ where
             function: P::ID,
             payload: None,
         };
-        match msg.request(&mut conn)?.payload {
+        match msg.request(conn)?.payload {
             Some(p) => Ok(p),
             None => Err(io::Error::new(
                 io::ErrorKind::InvalidData,
@@ -417,11 +417,11 @@ where
     }
 
     /// sends the message to
-    pub fn request<T: Read + Write>(&self, mut conn: &mut T) -> io::Result<Self> {
+    pub fn request<T: Read + Write>(&self, conn: &mut T) -> io::Result<Self> {
         let t_start = std::time::Instant::now();
-        self.encode(&mut conn)?;
+        self.encode(conn)?;
         let t_encode = t_start.elapsed();
-        let response = Self::decode(&mut conn)?;
+        let response = Self::decode(conn)?;
         let t_total = t_start.elapsed();
         trace!(
             "time spent: total {:?} encode {:?}, decode {:?}",
@@ -432,6 +432,9 @@ where
         Ok(response)
     }
 }
+
+pub trait MspConnection: Read + Write {}
+impl<T: Read + Write> MspConnection for T {}
 
 #[cfg(test)]
 mod test_handwritten {
