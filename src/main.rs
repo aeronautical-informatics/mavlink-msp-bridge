@@ -2,7 +2,7 @@ use std::env;
 use std::time::Instant;
 
 use clap::{value_t_or_exit, App, Arg};
-use log::{debug, error, info};
+use log::{debug, error, info, warn};
 use serialport::available_ports;
 
 #[macro_use]
@@ -14,17 +14,21 @@ mod serial;
 
 #[derive(Debug)]
 pub struct Config {
-    t0: Instant,
+    /// String which represents where the MAVLink connection shall listen. For further information,
+    /// see https://docs.rs/mavlink/0.6.0/mavlink/fn.connect.html .
     mavlink_listen: String,
+    /// MAVLink system id to propagate in sent MAV messages.
     mavlink_system_id: u8,
+    /// Serialport on which we may connect to an MSP FC
     msp_serialport: String,
+    /// Baudrate for given serialport
     msp_baud: u32,
 }
 
 fn main() {
     env::set_var(
         "RUST_LOG",
-        env::var("RUST_LOG").unwrap_or("debug".to_string()),
+        env::var("RUST_LOG").unwrap_or("info".to_string()),
     );
     env_logger::init();
     let matches = App::new(env!("CARGO_PKG_NAME"))
@@ -72,7 +76,6 @@ fn main() {
     }
 
     let conf = Config {
-        t0: Instant::now(),
         mavlink_listen: matches.value_of("mavlink").unwrap().to_string(),
         msp_serialport: matches
             .value_of("serial")
@@ -90,5 +93,8 @@ fn main() {
 
     info!("started");
     debug!("{:?}", &conf);
-    core::event_loop(&conf);
+    loop {
+        core::event_loop(&conf);
+        warn!("restarting event_loop");
+    }
 }
