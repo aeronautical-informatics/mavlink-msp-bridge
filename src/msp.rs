@@ -43,9 +43,9 @@ macro_rules! msp_payload {
         }
     };
 
-    ($name:ident $id:expr, $size:expr) => {
+    ($name:ident $id:expr, [$type:ty; $size:expr]) => {
         #[derive(Clone, Debug, PartialEq)]
-        struct $name( Vec<u8> );
+        struct $name( Vec<$type> );
 
         impl MspPayload for $name
             {
@@ -53,13 +53,24 @@ macro_rules! msp_payload {
                 const ID: IdType = $id;
 
                 fn decode<R: Read>(r: &mut R) -> io::Result<$name> {
-                    let mut buf = [0u8; $size];
+                    let mut buf = [0u8; size_of::<$type>() * $size];
                     r.read_exact(&mut buf[..])?;
-                    Ok($name(buf.to_vec()))
+                    
+                    let mut payload = vec![0 as $type; $size];
+                    let mut i = 0;
+                    for mut e in &mut payload {
+                        let size = size_of::<$type>();
+                        i += size;
+                        *e = <$type>::from_le_bytes(buf[i-size..i].try_into().unwrap());
+                    }
+                    Ok($name(payload))
                 }
 
                 fn encode<W: Write>(&self, w: &mut W) -> io::Result<()> {
-                    w.write_all(&self.0[..])
+                    for e in &self.0 {
+                        w.write_all(&e.to_le_bytes()[..])?;
+                    }
+                    Ok(())
                 }
             }
     };
@@ -69,8 +80,11 @@ macro_rules! msp_payload {
 
         #[cfg(test)]
         mod test_generated {
-            $( mod $name {
-                 use rand::random;
+
+            $( 
+                #[allow(non_snake_case)]
+                mod $name {
+                use rand::random;
 
                 use super::super::*;
 
@@ -208,13 +222,12 @@ msp_payload! {
 //    {Msp_SET_MOTOR  214},
 //    {Msp_RC  105},
 //    {Msp_SET_RAW_RC  200},
-//    {Msp_RAW_GPS  106},
-//    {Msp_SET_RAW_GPS  201},
-//    {Msp_COMP_GPS  107},
-//    {Msp_ATTITUDE  108},
-    { MspAttitude 108, angx: i16, angy: i16, heading: i16}
-//    {Msp_ALTITUDE  109},
-//    {Msp_ANALOG  110},
+    { MspRawGps  106, fix:u8, num_sat:u8, coord_lat: i32, coord_lon: i32, altitude: u16, speed:u16, ground_course: u16 },
+    { MspSetRawGps  201, fix:u8, num_sat:u8, coord_lat: i32, coord_lon: i32, altitude: u16, speed:u16},
+    { MspCompGps 107, distance_to_home: u16, direction_to_home: i16, update: u8},
+    { MspAttitude 108, angx: i16, angy: i16, heading: i16},
+    { MspAltitude 109, estimated_alt: i32, vario: i16},
+    { MspAnalog  110, vbat: u8, int_power_meter_sum: u16, rssi: u16, amperage: u16},
 //    {Msp_RC_TUNING  111},
 //    {Msp_SET_RC_TUNING  204},
 //    {Msp_PID  112},
@@ -226,7 +239,8 @@ msp_payload! {
 //    {Msp_MOTOR_PINS  115},
 //    {Msp_BOXNAMES  116},
 //    {Msp_PIDNAMES  117},
-//    {Msp_WP  118},
+    { MspWp 118, wp_no: u8, lat:i32, lon: i32, alt_hold: u32, heading: i16, time_to_stay:u16, nav_flag: u8},
+    { MspSetWp 209, wp_no: u8, lat:i32, lon: i32, alt_hold: u32, heading: i16, time_to_stay:u16, nav_flag: u8},
 //    {Msp_SET_WP  209},
 //    {Msp_BOXIDS  119},
 //    {Msp_SERVO_CONF  120},
@@ -235,7 +249,7 @@ msp_payload! {
 //    {Msp_MAG_CALIBRATION  206},
 //    {Msp_RESET_CONF  208},
 //    {Msp_SELECT_SETTING  210},
-//    {Msp_SET_HEAD  211},
+    { MspSetHead 211, mag_hold: i16}
 //    {Msp_BIND  240},
 //    {Msp_EEPROM_WRITE  250},
 }
@@ -465,7 +479,7 @@ mod test_handwritten {
 
     #[test]
     fn pure_bytes_to_mspv2_payload() {
-        msp_payload! {Special 0x4242, 18}
+        msp_payload! {Special 0x4242, [u8;18]}
 
         let buf = vec![
             0x24u8, 0x58, 0x3e, 0xa5, 0x42, 0x42, 0x12, 0x00, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20,
@@ -480,6 +494,8 @@ mod test_handwritten {
             payload: Some(Special("Hello flying world".as_bytes().to_vec())),
         };
 
+
+        
         let new_message: MspMessage<Special> =
             MspMessage::decode(&mut &buf[..]).expect("unable to decode new_message");
 
@@ -487,14 +503,14 @@ mod test_handwritten {
         message
             .encode(&mut &mut new_buf[..])
             .expect("unable to encode message");
-
+        
         assert_eq!(buf, new_buf);
         assert_eq!(message, new_message);
     }
 
     #[test]
     fn noised_bytes_to_mspv2() {
-        msp_payload! {Special 0x4242, 18}
+        msp_payload! {Special 0x4242, [u8;18]}
 
         let buf = vec![
             0x30, 0x60, 0x13, 0x24, 0x58, 0x3e, 0xa5, 0x42, 0x42, 0x12, 0x00, 0x48, 0x65, 0x6c,
@@ -518,7 +534,7 @@ mod test_handwritten {
 
     #[test]
     fn pure_bytes_to_mspv2_checksum_error() {
-        msp_payload! {Special 0x4242, 18}
+        msp_payload! {Special 0x4242, [u8;18]}
 
         let buf = vec![
             0x24u8, 0x58, 0x3e, 0xa5, 0x42, 0x42, 0x12, 0x00, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20,
