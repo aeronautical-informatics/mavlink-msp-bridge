@@ -29,7 +29,6 @@ pub fn event_loop(conf: &Config) {
         fn(
             conf: &Config,
             mspconn: &mut dyn MspConnection,
-            id: u32,
             context: Option<&MavMessage>,
         ) -> io::Result<MavMessage>,
     > = HashMap::new();
@@ -105,7 +104,6 @@ pub fn event_loop(conf: &Config) {
 pub fn heartbeat(
     conf: &Config,
     mut mspconn: &mut dyn MspConnection,
-    id: u32,
     context: Option<&MavMessage>,
 ) -> io::Result<MavMessage> {
     Ok(HEARTBEAT(HEARTBEAT_DATA {
@@ -121,7 +119,6 @@ pub fn heartbeat(
 pub fn param_value(
     conf: &Config,
     mut mspconn: &mut dyn MspConnection,
-    id: u32,
     context: Option<&MavMessage>,
 ) -> io::Result<MavMessage> {
     Ok(PARAM_VALUE(PARAM_VALUE_DATA {
@@ -138,7 +135,6 @@ pub fn param_value(
 pub fn raw_imu(
     conf: &Config,
     mut mspconn: &mut dyn MspConnection,
-    id: u32,
     context: Option<&MavMessage>,
 ) -> io::Result<MavMessage> {
     let payload: MspRawImu = MspMessage::fetch(&mut mspconn)?;
@@ -158,7 +154,6 @@ pub fn raw_imu(
 pub fn attitude(
     conf: &Config,
     mut mspconn: &mut dyn MspConnection,
-    id: u32,
     context: Option<&MavMessage>,
 ) -> io::Result<MavMessage> {
     let payload: MspAttitude = MspMessage::fetch(&mut mspconn)?;
