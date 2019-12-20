@@ -37,6 +37,7 @@ fn main() {
         .arg(
             Arg::with_name("serial")
                 .value_name("SERIALPORT")
+                .required(true)
                 .help("Select serial port for MSP side"),
         )
         .arg(
@@ -76,16 +77,7 @@ fn main() {
 
     let conf = Config {
         mavlink_listen: matches.value_of("mavlink").unwrap().to_string(),
-        msp_serialport: matches
-            .value_of("serial")
-            .unwrap_or(match available_ports() {
-                Ok(ref a) if a.len() >= 1 => &a[0].port_name,
-                _ => {
-                    error!("no serialport found");
-                    panic!();
-                }
-            })
-            .to_string(),
+        msp_serialport: matches.value_of("serial").unwrap().to_string(),
         msp_baud: value_t_or_exit!(matches.value_of("baud"), u32),
         mavlink_system_id: value_t_or_exit!(matches.value_of("mavlink-system-id"), u8),
     };

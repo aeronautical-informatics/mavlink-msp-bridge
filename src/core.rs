@@ -66,9 +66,13 @@ pub fn event_loop(conf: &Config) {
             // some MAV message is scheduled to be sent now
             Some(id) => {
                 trace!("processing task {}", id);
-                //let message = generators.(&conf, &mut mspconn, id, None)
-                //    .expect("message could not be generated");
-                //mavconn.send(&message);
+                if let Some(generator) = generators.get(&id) {
+                    let message = generator(&conf, &mut mspconn, None)
+                        .expect("message could not be generated");
+                    mavconn.send(&message);
+                }else{
+                    warn!("cannot process subscription for task {}", id);
+                }
             }
             // no scheduled MAV message, checking for incoming MAV message
             None => match mavconn.recv_timeout(Duration::from_millis(1)) {

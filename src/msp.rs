@@ -97,6 +97,7 @@ macro_rules! msp_codec {
     };
 }
 
+#[cfg(test)]
 macro_rules! msp_test {
     ( $name:ident $id:expr ) => {
         mod $name {
@@ -124,6 +125,7 @@ macro_rules! msp_test {
 
     ( $name:ident $id:expr, $($field_name:ident : $field_type:ty),+ ) => {
         #[allow(non_snake_case)]
+        #[cfg(test)]
         mod $name {
             use rand::random;
 
@@ -204,9 +206,7 @@ macro_rules! msp_test {
                 assert_eq!(buf, new_buf);
             }
         }
-
     };
-
 }
 
 macro_rules! msp_payload {
@@ -329,31 +329,31 @@ msp_payload! {
     { MspCompGps 107, distance_to_home: u16, direction_to_home: i16, update: u8},
     { MspAttitude 108, angx: i16, angy: i16, heading: i16},
     { MspAltitude 109, estimated_alt: i32, vario: i16},
-    { MspAnalog  110, vbat: u8, int_power_meter_sum: u16, rssi: u16, amperage: u16},
-    //    {Msp_RC_TUNING  111},
-    //    {Msp_SET_RC_TUNING  204},
-    //    {Msp_PID  112},
-    //    {Msp_SET_PID  202},
-    //    {Msp_BOX  113},
-    //    {Msp_SET_BOX  203},
-    //    {Msp_MISC  114},
-    //    {Msp_SET_MISC  207},
-    //    {Msp_MOTOR_PINS  115},
-    //    {Msp_BOXNAMES  116},
-    //    {Msp_PIDNAMES  117},
+    { MspAnalog 110, vbat: u8, int_power_meter_sum: u16, rssi: u16, amperage: u16},
+    { MspRcTuning 111, rc_rate:u8, rc_expo: u8, roll_pitch_rate: u8, yaw_rate: u8, dyn_thr_pid:u8, throttle_mid: u8, throttle_expo: u8},
+    { MspSetRcTuning 204, rc_rate:u8, rc_expo: u8, roll_pitch_rate: u8, yaw_rate: u8, dyn_thr_pid:u8, throttle_mid: u8, throttle_expo: u8},
+    //{Msp_PID  112},
+    //{Msp_SET_PID  202},
+    //{Msp_BOX  113},
+    //{Msp_SET_BOX  203},
+    //{Msp_MISC  114},
+    //{Msp_SET_MISC  207},
+    { MspMotorPins 115, [u8;8]},
+    //{Msp_BOXNAMES  116},
+    //{Msp_PIDNAMES  117},
     { MspWp 118, wp_no: u8, lat:i32, lon: i32, alt_hold: u32, heading: i16, time_to_stay:u16, nav_flag: u8},
     { MspSetWp 209, wp_no: u8, lat:i32, lon: i32, alt_hold: u32, heading: i16, time_to_stay:u16, nav_flag: u8},
-    //    {Msp_SET_WP  209},
-    //    {Msp_BOXIDS  119},
-    //    {Msp_SERVO_CONF  120},
-    //    {Msp_SET_SERVO_CONF  212},
-    //    {Msp_ACC_CALIBRATION  205},
-    //    {Msp_MAG_CALIBRATION  206},
-    //    {Msp_RESET_CONF  208},
-    //    {Msp_SELECT_SETTING  210},
+    //{Msp_SET_WP  209},
+    //{Msp_BOXIDS  119},
+    //{Msp_SERVO_CONF  120},
+    //{Msp_SET_SERVO_CONF  212},
+    //{Msp_ACC_CALIBRATION  205},
+    //{Msp_MAG_CALIBRATION  206},
+    //{Msp_RESET_CONF  208},
+    //{Msp_SELECT_SETTING  210},
     { MspSetHead 211, mag_hold: i16}
-    //    {Msp_BIND  240},
-//    { Msp_EEPROM_WRITE 250}
+    //{Msp_BIND  240},
+    //{ Msp_EEPROM_WRITE 250}
 }
 
 /// A flag may only be `Some(_)` if `version == MspVersion::V2`
