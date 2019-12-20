@@ -70,7 +70,7 @@ pub fn event_loop(conf: &Config) {
                     let message = generator(&conf, &mut mspconn, None)
                         .expect("message could not be generated");
                     mavconn.send(&message);
-                }else{
+                } else {
                     warn!("cannot process subscription for task {}", id);
                 }
             }
