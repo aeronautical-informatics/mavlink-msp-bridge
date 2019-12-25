@@ -53,7 +53,7 @@ fn main() {
                 .long("mavlink-listen")
                 .value_name("transport:ip:port")
                 .help("Select mavlink connection adress")
-                .default_value("tcpin:0.0.0.0:5760"),
+                .default_value("udpout:127.0.0.1:14550"),
         )
         .arg(
             Arg::with_name("mavlink-system-id")

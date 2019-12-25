@@ -57,7 +57,7 @@ pub fn event_loop(conf: &Config) {
         .insert(1, 0)
         .expect("unable to insert heartbeat in scheduler");
 
-    schedule.insert(5, 30); //debug
+    schedule.insert(30, 30);
 
     // enters eventloop to process scheduled messages and incoming messages
     info!("entering event_loop");

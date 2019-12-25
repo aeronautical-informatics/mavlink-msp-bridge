@@ -1,4 +1,6 @@
 language: rust
+before_script:
+  - rm -r .cargo
 script:
   - cargo build --verbose --all
   - cargo test --verbose --all
@@ -13,6 +15,9 @@ rust:
 matrix:
   allow_failures:
     - rust: nightly
+arch:
+  - amd64
+  - arm64
 os:
   - linux
   - osx

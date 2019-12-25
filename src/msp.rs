@@ -539,7 +539,7 @@ where
         let t_encode = t_start.elapsed();
         let response = Self::decode(conn)?;
         let t_total = t_start.elapsed();
-        if cfg!(debug_assertions) {
+        if cfg!(time_metrics) {
             println!(
                 "time spent: total {:?} encode {:?}, decode {:?}",
                 t_total,
