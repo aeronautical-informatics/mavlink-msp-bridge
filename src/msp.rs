@@ -389,7 +389,12 @@ where
     /// serializes message omiting the checksum
     fn ser(&self) -> io::Result<Vec<u8>> {
         match self.version {
-            MspVersion::V1 => panic!("not implemented yet"),
+            MspVersion::V1 => {
+                const LEN_OFFSET: usize = 4 + size_of::<IdType>();
+                let mut buf =
+                    vec![0u8; 4 * size_of::<u8>() + size_of::<IdType>() + size_of::<LenType>()];
+                Ok(buf)
+            }
             MspVersion::V2 => {
                 const LEN_OFFSET: usize = 4 + size_of::<IdType>();
 
@@ -420,7 +425,12 @@ where
     pub fn checksum(&self) -> u8 {
         match self.version {
             MspVersion::V1 => {
-                panic!("not yet implemented");
+                let mut xor = 0;
+                let buf = &self.ser().unwrap();
+                for byte in &buf[2..] {
+                    xor ^= byte;
+                }
+                xor
             }
             MspVersion::V2 => {
                 let mut crc = CRC::create_crc(0xd5, 8, 0x0, 0x0, false);

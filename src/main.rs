@@ -1,15 +1,17 @@
 use std::env;
+use std::time::Instant;
 
 use clap::{value_t_or_exit, App, Arg};
-use log::{debug, error, info, warn};
+use log::{debug, info, warn};
 use serialport::available_ports;
 
 #[macro_use]
-mod msp;
 mod core;
 mod mavlink;
+mod msp;
 mod scheduler;
 mod serial;
+mod translator;
 
 #[derive(Debug)]
 pub struct Config {
@@ -22,6 +24,8 @@ pub struct Config {
     msp_serialport: String,
     /// Baudrate for given serialport
     msp_baud: u32,
+    /// Point in time from which one timestamps in MAVLink messages are passed
+    t0: Instant,
 }
 
 fn main() {
@@ -80,6 +84,7 @@ fn main() {
         msp_serialport: matches.value_of("serial").unwrap().to_string(),
         msp_baud: value_t_or_exit!(matches.value_of("baud"), u32),
         mavlink_system_id: value_t_or_exit!(matches.value_of("mavlink-system-id"), u8),
+        t0: Instant::now(),
     };
 
     info!("started");
