@@ -2,28 +2,58 @@
 # https://hub.docker.com/r/library/rust/tags/
 image: "rust:latest"
 
-# Optional: Pick zero or more services to be used on all builds.
-# Only needed when using a docker container to run your tests in.
-# Check out: http://docs.gitlab.com/ce/ci/docker/using_docker_images.html#what-is-a-service
-# services:
-#   - mysql:latest
-#   - redis:latest
-#   - postgres:latest
-
 # Optional: Install a C compiler, cmake and git into the container.
 # You will often need this when you (or any of your dependencies) depends on C code.
-before_script:
-  - rustup toolchain add stable
-  - rustup toolchain add beta
-  - rustup toolchain add nightly
-  - rustup target add --toolchain stable  x86_64-unknown-linux-musl
-  - rustup target add --toolchain beta    x86_64-unknown-linux-musl
-  - rustup target add --toolchain nightly x86_64-unknown-linux-musl
+
+stages:
+  - build
+  - test
 
 # Use cargo to test the project
-test:cargo:
+cargo:build:stable:
+  stage: build
+  before_script:
+    - rustup toolchain add stable
+    - rustup target add --toolchain stable x86_64-unknown-linux-musl
   script:
-    - rustc --version && cargo --version  # Print version info for debugging
-    - cargo +stable  test --all --verbose
-    - cargo +beta    test --all --verbose
-    - cargo +nightly test --all --verbose
+    - cargo +stable build --all
+
+cargo:build:beta:
+  stage: build
+  before_script:
+    - rustup toolchain add beta
+    - rustup target add --toolchain beta x86_64-unknown-linux-musl
+  script:
+    - cargo +beta build --all
+
+cargo:build:nightly:
+  stage: build
+  before_script:
+    - rustup toolchain add nightly
+    - rustup target add --toolchain nightly x86_64-unknown-linux-musl
+  script:
+    - cargo +nightly build --all
+
+cargo:test:stable:
+  stage: test
+  before_script:
+    - rustup toolchain add stable
+    - rustup target add --toolchain stable x86_64-unknown-linux-musl
+  script:
+    - cargo +stable test --all
+
+cargo:test:beta:
+  stage: test
+  before_script:
+    - rustup toolchain add beta
+    - rustup target add --toolchain beta x86_64-unknown-linux-musl
+  script:
+    - cargo +beta test --all
+
+cargo:test:nightly:
+  stage: test
+  before_script:
+    - rustup toolchain add nightly
+    - rustup target add --toolchain nightly x86_64-unknown-linux-musl
+  script:
+    - cargo +nightly test --all
