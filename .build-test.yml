@@ -1,0 +1,26 @@
+image: "rust:latest"
+
+variables:
+  TOOLCHAIN: stable
+  TARGET: x86_64-unknown-linux-musl
+
+stages:
+  - build
+  - test
+
+before_script:
+  - rustup toolchain add $TOOLCHAIN
+  - rustup target add --toolchain $TOOLCHAIN $TARGET
+
+build:cargo:
+  stage: build
+  artifacts:
+    paths: target/
+  script:
+    - cargo +$TOOLCHAIN build --all
+
+test:cargo:
+  stage: test
+  script:
+    - cargo +$TOOLCHAIN test --all
+

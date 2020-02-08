@@ -8,7 +8,7 @@ use crate::Config;
 
 pub fn heartbeat(
     _conf: &Config,
-    mut _mspconn: &mut dyn MspConnection,
+    _mspconn: &mut dyn MspConnection,
     _context: Option<&MavMessage>,
 ) -> io::Result<MavMessage> {
     Ok(HEARTBEAT(HEARTBEAT_DATA {
@@ -23,7 +23,7 @@ pub fn heartbeat(
 
 pub fn param_value(
     _conf: &Config,
-    mut _mspconn: &mut dyn MspConnection,
+    _mspconn: &mut dyn MspConnection,
     _context: Option<&MavMessage>,
 ) -> io::Result<MavMessage> {
     Ok(PARAM_VALUE(PARAM_VALUE_DATA {
