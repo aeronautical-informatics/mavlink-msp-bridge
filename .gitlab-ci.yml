@@ -3,28 +3,6 @@ variables:
   TARGET: x86_64-unknown-linux-musl
 
 stable:
-  variables:
-    TOOLCHAIN: stable
-    TARGET: x86_64-unknown-linux-musl
   trigger:
-    include: .build-test.yml
-  script:
-    - rustc --version
-      
-beta:
-  variables:
-    TOOLCHAIN: beta 
-    TARGET: x86_64-unknown-linux-musl
-  trigger:
-    include: .build-test.yml
-  script:
-    - rustc --version
-
-nightly:
-  variables:
-    TOOLCHAIN: nightly 
-    TARGET: x86_64-unknown-linux-musl
-  trigger:
-    include: .build-test.yml
-  script:
-    - rustc --version
+    include: 
+      - local: .build-test.yml
