@@ -390,10 +390,11 @@ where
     fn ser(&self) -> io::Result<Vec<u8>> {
         match self.version {
             MspVersion::V1 => {
-                const LEN_OFFSET: usize = 4 + size_of::<IdType>();
-                let mut buf =
-                    vec![0u8; 4 * size_of::<u8>() + size_of::<IdType>() + size_of::<LenType>()];
-                Ok(buf)
+                //const LEN_OFFSET: usize = 4 + size_of::<IdType>();
+                //let buf =
+                //    vec![0u8; 4 * size_of::<u8>() + size_of::<IdType>() + size_of::<LenType>()];
+                //Ok(buf)
+                panic!("not implemented");
             }
             MspVersion::V2 => {
                 const LEN_OFFSET: usize = 4 + size_of::<IdType>();

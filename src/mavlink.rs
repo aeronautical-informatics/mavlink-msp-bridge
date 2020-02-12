@@ -1,15 +1,13 @@
-use std::io::{self, Read, Write};
+use std::io;
 use std::sync::mpsc;
 use std::sync::Arc;
 use std::thread;
 use std::time::Duration;
 
-use log::{debug, error, trace};
-use mavlink::common::MavMessage::*;
+use log::{debug, error};
 use mavlink::common::*;
 use mavlink::{MavConnection, MavHeader};
 
-use crate::msp::*;
 use crate::Config;
 
 type MavResponse = io::Result<(MavHeader, MavMessage)>;

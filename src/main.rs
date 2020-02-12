@@ -3,7 +3,6 @@ use std::time::Instant;
 
 use clap::{value_t_or_exit, App, Arg};
 use log::{debug, info, warn};
-use serialport::available_ports;
 
 #[macro_use]
 mod core;

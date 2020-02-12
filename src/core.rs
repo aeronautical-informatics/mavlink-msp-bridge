@@ -1,10 +1,9 @@
 use std::collections::HashMap;
 use std::io;
-use std::time::{Duration, Instant};
+use std::time::Duration;
 
 use log::{debug, error, info, trace, warn};
 
-use mavlink::common::MavMessage::*;
 use mavlink::common::*;
 
 use crate::mavlink::WrappedMavConnection;
@@ -34,13 +33,13 @@ pub fn event_loop(conf: &Config) {
         ) -> io::Result<MavMessage>,
     > = HashMap::new();
 
-    let mut response_to: HashMap<u32, u32> = HashMap::new();
+    let mut _response_to: HashMap<u32, u32> = HashMap::new();
 
     generators.insert(0, heartbeat);
     generators.insert(22, param_value);
     generators.insert(27, raw_imu);
     generators.insert(30, attitude);
-    //  generators.insert(44, mission_count);
+    //generators.insert(44, mission_count);
 
     // testing wether MSP connection is attached to MSP FC
     let resp: MspIdent = MspMessage::fetch(&mut mspconn).expect("unable to receive response");
@@ -58,7 +57,8 @@ pub fn event_loop(conf: &Config) {
         .insert(1, 0)
         .expect("unable to insert heartbeat in scheduler");
 
-    let _ = schedule.insert(30, 30);
+    // inform about attitude on high frequency
+    schedule.insert(30, 30).unwrap();
 
     // enters eventloop to process scheduled messages and incoming messages
     info!("entering event_loop");
@@ -79,15 +79,10 @@ pub fn event_loop(conf: &Config) {
             None => match mavconn.recv_timeout(Duration::from_millis(1)) {
                 Ok((_header, msg)) => {
                     match msg {
-                        MavMessage::HEARTBEAT(ref msg) => {}
+                        MavMessage::HEARTBEAT(ref _msg) => {}
                         MavMessage::MESSAGE_INTERVAL(ref msg) => {
-                            warn!("HOORAY");
                             let freq = (1_000_000f64 / msg.interval_us as f64) as u32;
-                            let _ = schedule.insert(freq, msg.message_id.into());
-                        }
-                        MavMessage::DATA_STREAM(ref msg) => {
-                            warn!("HOORAY");
-                            info!("gcs request {:?}", msg);
+                            schedule.insert(freq, msg.message_id.into()).unwrap();
                         }
                         msg => {
                             warn!("received MavMessage, don't know what to do: {:?}", msg);
