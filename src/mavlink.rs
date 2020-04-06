@@ -15,12 +15,12 @@ type MavResponse = io::Result<(MavHeader, MavMessage)>;
 pub struct WrappedMavConnection {
     system_id: u8,
     rx: mpsc::Receiver<MavResponse>,
-    conn: Arc<dyn MavConnection + Send + Sync>,
+    conn: Arc<dyn MavConnection<mavlink::common::MavMessage> + Send + Sync>,
 }
 
 impl WrappedMavConnection {
     pub fn new(conf: &Config) -> Self {
-        let mavconn: Arc<dyn MavConnection + Send + Sync> =
+        let mavconn: Arc<dyn MavConnection<mavlink::common::MavMessage> + Send + Sync> =
             mavlink::connect(&conf.mavlink_listen).unwrap().into();
 
         let (tx, rx) = mpsc::channel();
@@ -57,7 +57,7 @@ impl WrappedMavConnection {
     }
 
     pub fn send(&self, data: &MavMessage) -> io::Result<()> {
-        let mut header = mavlink::MavHeader::get_default_header();
+        let mut header = mavlink::MavHeader::default();
         header.system_id = self.system_id;
         debug!("sending: {:?}", data);
         self.conn.send(&header, data)
