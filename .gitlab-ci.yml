@@ -1,8 +1,45 @@
-variables:
-  TOOLCHAIN: stable
-  TARGET: x86_64-unknown-linux-musl
+image: 'rust:latest'
 
-stable:
-  trigger:
-    include: 
-      - local: .build-test.yml
+stages:
+  - test
+  - build
+
+variables:
+  CARGO_HOME: $CI_PROJECT_DIR/cargo
+  APT_CACHE_DIR: $CI_PROJECT_DIR/apt
+  BINARY: mavlink-msp-bridge
+
+before_script:
+  - apt-get update -yq
+  - apt-get install -o dir::cache::archives="$APT_CACHE_DIR" -y mingw-w64 musl-dev
+  - rustup target add x86_64-pc-windows-gnu
+  - rustup target add x86_64-unknown-linux-musl
+
+build-windows:
+  stage: build
+  script:
+    - cargo build --release --target=x86_64-pc-windows-gnu
+  artifacts:
+    paths:
+      - target/*/release/$BINARY.exe
+
+build-linux:
+  stage: build
+  script:
+    - cargo build --release --target=x86_64-unknown-linux-musl
+  artifacts:
+    paths:
+      - target/*/release/$BINARY
+
+test:
+  stage: test
+  script:
+    - rustc --version
+    - cargo --version
+    - cargo test --verbose
+
+cache:
+  paths:
+    - apt/
+    - cargo/
+    - target/
