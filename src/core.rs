@@ -108,9 +108,6 @@ pub fn event_loop(conf: &Config) -> ! {
                                 }
                             };
                         }
-                        Err(ref e) if e.kind() == io::ErrorKind::WouldBlock => {
-                            continue;
-                        }
                         Err(e) => error!("recv error: {:?}", e),
                     }
                 }
