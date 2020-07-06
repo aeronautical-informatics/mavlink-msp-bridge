@@ -43,7 +43,7 @@ pub fn raw_imu(
     _context: Option<&MavMessage>,
 ) -> io::Result<MavMessage> {
     let payload: MspRawImu = MspMessage::fetch(&mut mspconn)?;
-    return Ok(RAW_IMU(RAW_IMU_DATA {
+    Ok(RAW_IMU(RAW_IMU_DATA {
         time_usec: conf.t0.elapsed().as_micros() as u64,
         xacc: payload.accx,
         yacc: payload.accy,
@@ -54,7 +54,7 @@ pub fn raw_imu(
         xmag: payload.magx,
         ymag: payload.magy,
         zmag: payload.magz,
-    }));
+    }))
 }
 
 pub fn attitude(

@@ -37,9 +37,12 @@ macro_rules! msp_codec {
                 let mut buf = [0u8; Self::SIZE];
                 r.read_exact(&mut buf[..])?;
                 let mut i = 0;
+
+                #[allow(clippy::eval_order_dependence)]
                 Ok( $name {
                     $( $field_name : {
                         let size = size_of::<$field_type>();
+
                         i += size;
                         <$field_type>::from_le_bytes(buf[i-size..i].try_into().unwrap())
                     }, )+
@@ -251,9 +254,9 @@ pub enum MspDirection {
 impl From<&MspDirection> for u8 {
     fn from(d: &MspDirection) -> Self {
         match d {
-            MspDirection::Request => '<' as u8,
-            MspDirection::Response => '>' as u8,
-            MspDirection::Error => '!' as u8,
+            MspDirection::Request => b'<',
+            MspDirection::Response => b'>',
+            MspDirection::Error => b'!',
         }
     }
 }
@@ -284,8 +287,8 @@ pub enum MspVersion {
 impl From<&MspVersion> for u8 {
     fn from(d: &MspVersion) -> Self {
         match d {
-            MspVersion::V1 => 'M' as u8,
-            MspVersion::V2 => 'X' as u8,
+            MspVersion::V1 => b'M',
+            MspVersion::V2 => b'X',
         }
     }
 }
@@ -401,7 +404,7 @@ where
 
                 let mut buf =
                     vec![0u8; 4 * size_of::<u8>() + size_of::<IdType>() + size_of::<LenType>()];
-                buf[0] = '$' as u8;
+                buf[0] = b'$';
                 buf[1] = u8::from(&self.version);
                 buf[2] = u8::from(&self.direction);
                 buf[3] = self.flag.unwrap_or(0);
@@ -507,15 +510,16 @@ where
                     state = Some(State::Checksum);
                 }
                 Some(State::Payload(_)) => state = Some(State::Checksum),
-                Some(State::Checksum) => match message.checksum() == get!(r, u8) {
-                    true => return Ok(message.clone()),
-                    false => {
+                Some(State::Checksum) => {
+                    if message.checksum() == get!(r, u8) {
+                        return Ok(message);
+                    } else {
                         return Err(io::Error::new(
                             io::ErrorKind::InvalidInput,
                             "wrong Msp checksum",
-                        ))
+                        ));
                     }
-                },
+                }
                 None => {
                     if get!(r, u8) as char == '$' {
                         state = Some(State::Header);

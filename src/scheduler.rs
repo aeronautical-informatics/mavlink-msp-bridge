@@ -1,6 +1,9 @@
 use std::cmp::Eq;
+use std::convert::TryInto;
 use std::fmt;
 use std::time::{Duration, Instant};
+
+use smol::Timer;
 
 /// `std::Vec` representing one major timeframe of `duration` length,
 /// divided in `size` slots of which each may contain one MAVLink message id.
@@ -8,36 +11,35 @@ pub struct Schedule<T: Clone + Copy + PartialEq> {
     time: Vec<Option<T>>,
     duration: Duration,
     last_frame: u128,
-    time_zero: Instant,
+    last_frame_time: Instant,
 }
 
 impl<T: Clone + Copy + PartialEq> Schedule<T> {
+    /// Initializes a new instance of `Schedule`
     pub fn new(size: usize) -> Self {
+        assert!(size > u32::MAX.try_into().unwrap(), "Schedule too big");
+
         Schedule {
             time: vec![None; size],
             duration: Duration::new(1, 0),
             last_frame: 0,
-            time_zero: Instant::now(),
+            last_frame_time: Instant::now(),
         }
     }
 
-    pub fn next(&mut self) -> Option<T> {
-        let duration = self.duration.as_nanos();
-        let elapsed = self.time_zero.elapsed().as_nanos();
-        let current_frame_index = elapsed * self.time.len() as u128 / duration;
-
-        if self.last_frame == current_frame_index {
-            return None;
-        }
-        assert!(self.last_frame < current_frame_index);
-
-        self.last_frame += 1;
-        let mut index = (self.last_frame % self.time.len() as u128) as usize;
-        while self.time[index].is_none() && self.last_frame < current_frame_index {
+    /// yields the next event of the schedule
+    pub async fn next(&mut self) -> T {
+        loop {
+            let index = (self.last_frame % self.time.len() as u128) as usize;
+            let minor_frame_duration = self.duration / self.time.len() as u32;
+            let next_minor_frame_time = self.last_frame_time + minor_frame_duration;
+            Timer::at(next_minor_frame_time).await;
+            self.last_frame_time = next_minor_frame_time;
             self.last_frame += 1;
-            index = (self.last_frame % self.time.len() as u128) as usize;
+            if let Some(task) = self.time[index] {
+                return task;
+            }
         }
-        self.time[index]
     }
 
     /// counts the occurences of a given task in the current schedule
@@ -117,9 +119,9 @@ impl<T: Clone + Copy + PartialEq> Schedule<T> {
 
 impl<T: Copy + Eq + ToString> fmt::Display for Schedule<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
+        writeln!(
             f,
-            "Schedule {{size: {}, duration: {:#?} }}:\n",
+            "Schedule {{size: {}, duration: {:#?} }}:",
             self.time.len(),
             self.duration
         )?;

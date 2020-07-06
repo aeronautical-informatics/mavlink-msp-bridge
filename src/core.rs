@@ -1,19 +1,25 @@
 use std::collections::HashMap;
 use std::io;
+use std::sync::{mpsc::channel, Arc};
 use std::time::Duration;
-
-use log::{debug, error, info, trace, warn};
 
 use mavlink::common::*;
 
-use crate::mavlink::WrappedMavConnection;
+use futures::prelude::*;
+use smol::{blocking, Task};
 
 use crate::msp::*;
 use crate::scheduler::Schedule;
 use crate::translator::*;
 use crate::Config;
 
-pub fn event_loop(conf: &Config) {
+pub type GeneratorFn = fn(
+    conf: &Config,
+    mspconn: &mut dyn MspConnection,
+    context: Option<&MavMessage>,
+) -> io::Result<MavMessage>;
+
+pub fn event_loop(conf: &Config) -> ! {
     // initializes the MSP connection
     let mut mspconn =
         serialport::open(&conf.msp_serialport).expect("unable to open serial SERIALPORT");
@@ -24,14 +30,7 @@ pub fn event_loop(conf: &Config) {
         .clear(serialport::ClearBuffer::All)
         .expect("unable to clear serial connection");
 
-    let mut generators: HashMap<
-        u32,
-        fn(
-            conf: &Config,
-            mspconn: &mut dyn MspConnection,
-            context: Option<&MavMessage>,
-        ) -> io::Result<MavMessage>,
-    > = HashMap::new();
+    let mut generators: HashMap<u32, GeneratorFn> = HashMap::new();
 
     let mut _response_to: HashMap<u32, u32> = HashMap::new();
 
@@ -48,7 +47,8 @@ pub fn event_loop(conf: &Config) {
 
     // initializes MAV connection
     info!("waiting for MAVLink connection");
-    let mavconn = WrappedMavConnection::new(&conf);
+    let mavconn = Arc::new(mavlink::connect(&conf.mavlink_listen).unwrap());
+
     info!("MAVLink connection opened on {}", &conf.mavlink_listen);
 
     // initializes scheduler and inserts HEARTBEAT task
@@ -61,42 +61,61 @@ pub fn event_loop(conf: &Config) {
     schedule.insert(30, 30).unwrap();
 
     // enters eventloop to process scheduled messages and incoming messages
-    info!("entering event_loop");
-    loop {
-        match schedule.next() {
-            // some MAV message is scheduled to be sent now
-            Some(id) => {
-                trace!("processing task {}", id);
-                if let Some(generator) = generators.get(&id) {
-                    let message = generator(&conf, &mut mspconn, None)
-                        .expect("message could not be generated");
-                    let _ = mavconn.send(&message);
-                } else {
-                    warn!("cannot process subscription for task {}", id);
+    info!("starting reactor");
+
+    let mut tasks: Vec<_> = Vec::new();
+
+    smol::run(async {
+        // Satisfie enqued tasks
+        tasks.push(Task::local({
+            let conf = conf.clone();
+            let mavconn = mavconn.clone();
+            async move {
+                let mut header = mavlink::MavHeader::default();
+                header.system_id = conf.mavlink_system_id;
+                loop {
+                    let task = schedule.next().await;
+                    let id = task;
+                    if let Some(generator) = generators.get(&id) {
+                        let message = generator(&conf, &mut mspconn, None)
+                            .expect("message could not be generated");
+                        let _ = mavconn.send(&header, &message);
+                    } else {
+                        warn!("cannot process subscription for task {}", id);
+                    }
                 }
             }
-            // no scheduled MAV message, checking for incoming MAV message
-            None => match mavconn.recv_timeout(Duration::from_millis(1)) {
-                Ok((_header, msg)) => {
-                    match msg {
-                        MavMessage::HEARTBEAT(ref _msg) => {}
-                        MavMessage::MESSAGE_INTERVAL(ref msg) => {
-                            let freq = (1_000_000f64 / msg.interval_us as f64) as u32;
-                            schedule.insert(freq, msg.message_id.into()).unwrap();
+        }));
+
+        // reac to incoming MAVLink messages
+        tasks.push(Task::local({
+            let mavconn = mavconn.clone();
+            async move {
+                loop {
+                    let mavconn_copy = mavconn.clone();
+                    match blocking!(mavconn_copy.recv()) {
+                        Ok((_header, msg)) => {
+                            match msg {
+                                MavMessage::HEARTBEAT(ref _msg) => {}
+                                MavMessage::MESSAGE_INTERVAL(ref msg) => {
+                                    let freq = (1_000_000f64 / msg.interval_us as f64) as u32;
+                                    //schedule.insert(freq, msg.message_id.into()).unwrap();
+                                }
+                                msg => {
+                                    warn!("received MavMessage, don't know what to do: {:?}", msg);
+                                }
+                            };
                         }
-                        msg => {
-                            warn!("received MavMessage, don't know what to do: {:?}", msg);
+                        Err(ref e) if e.kind() == io::ErrorKind::WouldBlock => {
+                            continue;
                         }
-                    };
+                        Err(e) => error!("recv error: {:?}", e),
+                    }
                 }
-                Err(ref e) if e.kind() == io::ErrorKind::WouldBlock => {
-                    continue;
-                }
-                Err(e) => {
-                    error!("recv error: {:?}", e);
-                    break;
-                }
-            },
-        }
-    }
+            }
+        }));
+
+        future::join_all(tasks).await;
+        panic!("event loop broke")
+    })
 }
