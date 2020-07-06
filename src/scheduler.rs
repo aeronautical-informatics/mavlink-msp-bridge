@@ -1,43 +1,57 @@
 use std::cmp::Eq;
 use std::convert::TryInto;
 use std::fmt;
+use std::sync::Arc;
+use std::sync::Mutex;
 use std::time::{Duration, Instant};
 
+use arc_swap::ArcSwapOption;
 use smol::Timer;
+
+const POISON: &str = "RwLock poisoned";
 
 /// `std::Vec` representing one major timeframe of `duration` length,
 /// divided in `size` slots of which each may contain one MAVLink message id.
 pub struct Schedule<T: Clone + Copy + PartialEq> {
-    time: Vec<Option<T>>,
+    time: Vec<ArcSwapOption<T>>,
+    len: u32,
     duration: Duration,
-    last_frame: u128,
-    last_frame_time: Instant,
+    frame: Mutex<FrameInformation>,
+}
+
+#[derive(Clone)]
+struct FrameInformation {
+    last: u128,
+    last_time: Instant,
 }
 
 impl<T: Clone + Copy + PartialEq> Schedule<T> {
     /// Initializes a new instance of `Schedule`
     pub fn new(size: usize) -> Self {
-        assert!(size > u32::MAX.try_into().unwrap(), "Schedule too big");
-
         Schedule {
-            time: vec![None; size],
+            time: vec![ArcSwapOption::from(None); size],
+            len: size.try_into().expect("Schedule too big"),
             duration: Duration::new(1, 0),
-            last_frame: 0,
-            last_frame_time: Instant::now(),
+            frame: Mutex::new(FrameInformation {
+                last: 0,
+                last_time: Instant::now(),
+            }),
         }
     }
 
     /// yields the next event of the schedule
-    pub async fn next(&mut self) -> T {
+    pub async fn next(&self) -> T {
         loop {
-            let index = (self.last_frame % self.time.len() as u128) as usize;
-            let minor_frame_duration = self.duration / self.time.len() as u32;
-            let next_minor_frame_time = self.last_frame_time + minor_frame_duration;
+            let mut fi = self.frame.lock().expect(POISON);
+            let index = (fi.last % self.len as u128) as usize;
+            let minor_frame_duration = self.duration / self.len;
+            let next_minor_frame_time = fi.last_time + minor_frame_duration;
+
             Timer::at(next_minor_frame_time).await;
-            self.last_frame_time = next_minor_frame_time;
-            self.last_frame += 1;
-            if let Some(task) = self.time[index] {
-                return task;
+            fi.last_time = next_minor_frame_time;
+            fi.last += 1;
+            if let Some(task) = &*self.time[index].load() {
+                return **task;
             }
         }
     }
@@ -46,13 +60,15 @@ impl<T: Clone + Copy + PartialEq> Schedule<T> {
     pub fn count(&self, task: &T) -> usize {
         self.time
             .iter()
-            .filter_map(|t| *t)
-            .filter(|t| t == task)
+            .filter(|mt| match mt.load().as_ref() {
+                Some(ref t) if *task == ***t => true,
+                _ => false,
+            })
             .count()
     }
 
     /// tries to insert a schedule into
-    pub fn insert(&mut self, frequency: u32, task: T) -> Result<(), &'static str> {
+    pub fn insert(&self, frequency: u32, task: T) -> Result<(), &'static str> {
         if frequency == 0 {
             self.delete(&task);
             return Ok(());
@@ -71,7 +87,7 @@ impl<T: Clone + Copy + PartialEq> Schedule<T> {
         let time_use: Vec<usize> = self
             .time
             .iter()
-            .map(|a| if a.is_none() { 0 } else { 1 })
+            .map(|mt| if (*mt.load()).is_none() { 0 } else { 1 })
             .collect();
         for i in 0..self.time.len() {
             let sum: usize = time_use
@@ -97,8 +113,8 @@ impl<T: Clone + Copy + PartialEq> Schedule<T> {
                     .take(self.time.len())
                 {
                     if *t == 1 {
-                        assert!(self.time[i].is_none());
-                        self.time[i] = Some(task);
+                        assert!(self.time[i].load().is_none());
+                        self.time[i].store(Some(Arc::new(task)));
                     }
                 }
                 Ok(())
@@ -107,13 +123,11 @@ impl<T: Clone + Copy + PartialEq> Schedule<T> {
         }
     }
 
-    pub fn delete(&mut self, task: &T) {
-        for i in 0..self.time.len() {
-            match self.time[i] {
-                Some(t) if t == *task => self.time[i] = None,
-                _ => (),
-            }
-        }
+    pub fn delete(&self, task: &T) {
+        self.time.iter().for_each(|mt| match mt.load().as_ref() {
+            Some(ref t) if *task == ***t => mt.store(None),
+            _ => {}
+        })
     }
 }
 
@@ -130,7 +144,7 @@ impl<T: Copy + Eq + ToString> fmt::Display for Schedule<T> {
             "{}",
             self.time
                 .iter()
-                .map(|a| match a {
+                .map(|mt| match mt.load().as_ref() {
                     Some(task) => task.to_string(),
                     _ => "-".to_string(),
                 })
@@ -142,7 +156,9 @@ impl<T: Copy + Eq + ToString> fmt::Display for Schedule<T> {
 #[cfg(test)]
 mod test {
     use super::*;
-    use std::thread;
+    use smol;
+    use std::thread::sleep;
+    use std::time::{Duration, Instant};
 
     #[derive(Clone, Copy, Debug, PartialEq)]
     pub struct Task {
@@ -151,7 +167,7 @@ mod test {
 
     #[test]
     fn simple() {
-        let mut s = Schedule::new(200);
+        let s = Schedule::new(200);
         let range = 3..10;
         for i in range.clone() {
             let t = Task { id: i };
@@ -166,7 +182,7 @@ mod test {
     #[test]
     fn multiple_identical_frequencies() {
         let freq = 7;
-        let mut s = Schedule::new(200);
+        let s = Schedule::new(200);
         let range = 0..20;
         for i in range.clone() {
             let t = Task { id: i };
@@ -180,42 +196,32 @@ mod test {
 
     #[test]
     fn multiple_similar_frequencies() {
-        let mut s = Schedule::new(200);
+        let s = Schedule::new(200);
         for i in 3..14 {
             let t = Task { id: i };
             s.insert(i % 5 + 1, t).unwrap();
         }
     }
 
-    // fails due to slow CI, works on my machine™
-
+    // TODO: check actual timing
     #[test]
-    #[ignore]
     fn timing_behaviour() {
-        let mut s = Schedule::new(10);
+        let s = Schedule::new(10);
         let t = Task { id: 1 };
-        assert_eq!(s.next(), None);
-        s.insert(3, t).unwrap();
-        assert_eq!(s.next(), None);
-        thread::sleep(Duration::from_millis(100));
-        assert_eq!(s.next(), None);
-        assert_eq!(s.next(), None);
-        assert_eq!(s.next(), None);
-        thread::sleep(Duration::from_millis(300));
-        assert_eq!(s.next(), Some(Task { id: 1 }));
-        assert_eq!(s.next(), None);
-        assert_eq!(s.next(), None);
-        assert_eq!(s.next(), None);
-        thread::sleep(Duration::from_millis(700));
-        assert_eq!(s.next(), Some(Task { id: 1 }));
-        assert_eq!(s.next(), Some(Task { id: 1 }));
-        assert_eq!(s.next(), None);
-        assert_eq!(s.next(), None);
-        assert_eq!(s.next(), None);
-        thread::sleep(Duration::from_millis(1000));
-        assert_eq!(s.next(), Some(Task { id: 1 }));
-        assert_eq!(s.next(), Some(Task { id: 1 }));
-        assert_eq!(s.next(), Some(Task { id: 1 }));
-        assert_eq!(s.next(), None);
+        let t0 = Instant::now();
+        let tol = Duration::from_millis(10);
+        let hundred_milli = Duration::from_millis(100);
+        smol::run(async move {
+            s.insert(3, t).unwrap();
+            assert_eq!(s.next().await, t);
+            assert!(hundred_milli < t0.elapsed() && t0.elapsed() < hundred_milli + tol);
+            sleep(Duration::from_millis(700));
+            assert_eq!(s.next().await, t);
+            assert_eq!(s.next().await, t);
+            sleep(Duration::from_millis(1000));
+            assert_eq!(s.next().await, t);
+            assert_eq!(s.next().await, t);
+            assert_eq!(s.next().await, t);
+        });
     }
 }

@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use std::io;
-use std::sync::{mpsc::channel, Arc};
+use std::sync::Arc;
 use std::time::Duration;
 
 use mavlink::common::*;
@@ -52,7 +52,7 @@ pub fn event_loop(conf: &Config) -> ! {
     info!("MAVLink connection opened on {}", &conf.mavlink_listen);
 
     // initializes scheduler and inserts HEARTBEAT task
-    let mut schedule = Schedule::new(50);
+    let schedule = Arc::new(Schedule::new(50));
     schedule
         .insert(1, 0)
         .expect("unable to insert heartbeat in scheduler");
@@ -70,6 +70,7 @@ pub fn event_loop(conf: &Config) -> ! {
         tasks.push(Task::local({
             let conf = conf.clone();
             let mavconn = mavconn.clone();
+            let schedule = schedule.clone();
             async move {
                 let mut header = mavlink::MavHeader::default();
                 header.system_id = conf.mavlink_system_id;
@@ -90,6 +91,7 @@ pub fn event_loop(conf: &Config) -> ! {
         // reac to incoming MAVLink messages
         tasks.push(Task::local({
             let mavconn = mavconn.clone();
+            let schedule = schedule.clone();
             async move {
                 loop {
                     let mavconn_copy = mavconn.clone();
@@ -99,7 +101,7 @@ pub fn event_loop(conf: &Config) -> ! {
                                 MavMessage::HEARTBEAT(ref _msg) => {}
                                 MavMessage::MESSAGE_INTERVAL(ref msg) => {
                                     let freq = (1_000_000f64 / msg.interval_us as f64) as u32;
-                                    //schedule.insert(freq, msg.message_id.into()).unwrap();
+                                    schedule.insert(freq, msg.message_id.into()).unwrap();
                                 }
                                 msg => {
                                     warn!("received MavMessage, don't know what to do: {:?}", msg);
