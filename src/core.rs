@@ -6,7 +6,6 @@ use std::time::Duration;
 use mavlink::common::*;
 
 use futures::prelude::*;
-use smol::{blocking, Task};
 
 use crate::msp::*;
 use crate::scheduler::Schedule;
@@ -65,9 +64,9 @@ pub fn event_loop(conf: &Config) -> ! {
 
     let mut tasks: Vec<_> = Vec::new();
 
-    smol::run(async {
+    smol::block_on(async {
         // Satisfie enqued tasks
-        tasks.push(Task::local({
+        smol::spawn({
             let conf = conf.clone();
             let mavconn = mavconn.clone();
             let schedule = schedule.clone();
@@ -86,16 +85,17 @@ pub fn event_loop(conf: &Config) -> ! {
                     }
                 }
             }
-        }));
+        })
+        .detach();
 
         // reac to incoming MAVLink messages
-        tasks.push(Task::local({
+        tasks.push(smol::spawn({
             let mavconn = mavconn.clone();
             let schedule = schedule.clone();
             async move {
                 loop {
                     let mavconn_copy = mavconn.clone();
-                    match blocking!(mavconn_copy.recv()) {
+                    match smol::unblock(move || mavconn_copy.recv()).await {
                         Ok((_header, msg)) => {
                             match msg {
                                 MavMessage::HEARTBEAT(ref _msg) => {}

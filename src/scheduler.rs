@@ -1,14 +1,12 @@
+use smol::lock::Mutex;
 use std::cmp::Eq;
 use std::convert::TryInto;
 use std::fmt;
 use std::sync::Arc;
-use std::sync::Mutex;
 use std::time::{Duration, Instant};
 
 use arc_swap::ArcSwapOption;
 use smol::Timer;
-
-const POISON: &str = "RwLock poisoned";
 
 /// `std::Vec` representing one major timeframe of `duration` length,
 /// divided in `size` slots of which each may contain one MAVLink message id.
@@ -16,7 +14,7 @@ pub struct Schedule<T: Clone + Copy + PartialEq> {
     time: Vec<ArcSwapOption<T>>,
     len: u32,
     duration: Duration,
-    frame: Mutex<FrameInformation>,
+    frame: Arc<Mutex<FrameInformation>>,
 }
 
 #[derive(Clone)]
@@ -32,17 +30,17 @@ impl<T: Clone + Copy + PartialEq> Schedule<T> {
             time: vec![ArcSwapOption::from(None); size],
             len: size.try_into().expect("Schedule too big"),
             duration: Duration::new(1, 0),
-            frame: Mutex::new(FrameInformation {
+            frame: Arc::new(Mutex::new(FrameInformation {
                 last: 0,
                 last_time: Instant::now(),
-            }),
+            })),
         }
     }
 
     /// yields the next event of the schedule
     pub async fn next(&self) -> T {
         loop {
-            let mut fi = self.frame.lock().expect(POISON);
+            let mut fi = self.frame.lock().await;
             let index = (fi.last % self.len as u128) as usize;
             let minor_frame_duration = self.duration / self.len;
             let next_minor_frame_time = fi.last_time + minor_frame_duration;
@@ -60,10 +58,7 @@ impl<T: Clone + Copy + PartialEq> Schedule<T> {
     pub fn count(&self, task: &T) -> usize {
         self.time
             .iter()
-            .filter(|mt| match mt.load().as_ref() {
-                Some(ref t) if *task == ***t => true,
-                _ => false,
-            })
+            .filter(|mt| matches!(mt.load().as_ref(), Some(ref t) if *task == ***t))
             .count()
     }
 
@@ -211,7 +206,7 @@ mod test {
         let t0 = Instant::now();
         let tol = Duration::from_millis(10);
         let hundred_milli = Duration::from_millis(100);
-        smol::run(async move {
+        smol::block_on(async move {
             s.insert(3, t).unwrap();
             assert_eq!(s.next().await, t);
             assert!(hundred_milli < t0.elapsed() && t0.elapsed() < hundred_milli + tol);
