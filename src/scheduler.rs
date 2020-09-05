@@ -39,8 +39,8 @@ impl<T: Clone + Copy + PartialEq> Schedule<T> {
 
     /// yields the next event of the schedule
     pub async fn next(&self) -> T {
+        let mut fi = self.frame.lock().await;
         loop {
-            let mut fi = self.frame.lock().await;
             let index = (fi.last % self.len as u128) as usize;
             let minor_frame_duration = self.duration / self.len;
             let next_minor_frame_time = fi.last_time + minor_frame_duration;

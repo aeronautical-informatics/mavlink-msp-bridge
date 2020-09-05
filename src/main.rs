@@ -13,6 +13,7 @@ use clap::Clap;
 
 mod core;
 mod msp;
+mod msp_async;
 mod scheduler;
 mod translator;
 

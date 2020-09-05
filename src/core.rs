@@ -62,8 +62,6 @@ pub fn event_loop(conf: &Config) -> ! {
     // enters eventloop to process scheduled messages and incoming messages
     info!("starting reactor");
 
-    let mut tasks: Vec<_> = Vec::new();
-
     smol::block_on(async {
         // Satisfie enqued tasks
         smol::spawn({
@@ -89,7 +87,7 @@ pub fn event_loop(conf: &Config) -> ! {
         .detach();
 
         // reac to incoming MAVLink messages
-        tasks.push(smol::spawn({
+        smol::spawn({
             let mavconn = mavconn.clone();
             let schedule = schedule.clone();
             async move {
@@ -112,9 +110,9 @@ pub fn event_loop(conf: &Config) -> ! {
                     }
                 }
             }
-        }));
+        })
+        .detach();
 
-        future::join_all(tasks).await;
         panic!("event loop broke")
     })
 }
